@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ObjetViewDlg" widgetVar="ObjetViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewObjetTitle}">
+            <h:form id="ObjetViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{objetController.selected != null}">
+                        <h:outputText value="#{bundle.ViewObjetLabel_libelle}"/>
+                        <h:outputText value="#{objetController.selected.libelle}" title="#{bundle.ViewObjetTitle_libelle}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_id}"/>
+                        <h:outputText value="#{objetController.selected.id}" title="#{bundle.ViewObjetTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_idObjet}"/>
+                        <h:outputText value="#{objetController.selected.idObjet}" title="#{bundle.ViewObjetTitle_idObjet}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_prixLocation}"/>
+                        <h:outputText value="#{objetController.selected.prixLocation}" title="#{bundle.ViewObjetTitle_prixLocation}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_caution}"/>
+                        <h:outputText value="#{objetController.selected.caution}" title="#{bundle.ViewObjetTitle_caution}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_amendeDepassement}"/>
+                        <h:outputText value="#{objetController.selected.amendeDepassement}" title="#{bundle.ViewObjetTitle_amendeDepassement}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_etatObjet}"/>
+                        <h:outputText value="#{objetController.selected.etatObjet}" title="#{bundle.ViewObjetTitle_etatObjet}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_defauts}"/>
+                        <h:outputText value="#{objetController.selected.defauts}" title="#{bundle.ViewObjetTitle_defauts}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_description}"/>
+                        <h:outputText value="#{objetController.selected.description}" title="#{bundle.ViewObjetTitle_description}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_categorie}"/>
+                        <h:outputText value="#{objetController.selected.categorie}" title="#{bundle.ViewObjetTitle_categorie}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_pointLocation}"/>
+                        <h:outputText value="#{objetController.selected.pointLocation}" title="#{bundle.ViewObjetTitle_pointLocation}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="ObjetViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

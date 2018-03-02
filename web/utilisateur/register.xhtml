@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <body style="background-image: url('pagelogin.jpg')">
+        <p:growl id="growld" life="3000" />
+
+        #{utilisateurController.prepareCreate()}
+
+        <p:panel header="Créer un compte" style="display: table; margin: auto; margin-top: 2%; 
+                 margin-bottom: 5%; box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+            <h:form id="UserCreateForm">
+                <h:panelGrid id="grid" columns="2" cellpadding="5"> 
+                    <p:outputLabel value="#{bundle.CreateUtilisateurLabel_prenom}" for="prenom" />
+                    <p:inputText id="prenom" value="#{utilisateurController.selected.prenom}" title="#{bundle.CreateUtilisateurTitle_prenom}" />
+
+                    <p:outputLabel value="#{bundle.CreateUtilisateurLabel_nom}" for="nom" />
+                    <p:inputText id="nom" value="#{utilisateurController.selected.nom}" title="#{bundle.CreateUtilisateurTitle_nom}" />
+
+                    <p:outputLabel value="#{bundle.CreateUtilisateurLabel_email}" for="email" />
+                    <p:inputText id="email" value="#{utilisateurController.selected.email}" required="true" title="#{bundle.CreateUtilisateurTitle_email}" />
+
+                    <p:outputLabel value="#{bundle.CreateUtilisateurLabel_password}" for="password" />
+                    <p:inputText id="password" value="#{utilisateurController.selected.password}" title="#{bundle.CreateUtilisateurTitle_password}" />
+
+                    <p:outputLabel value="Mot de passe:" for="password1" />
+                    <p:password id="password1" required="true" value="#{utilisateurController.selected.password}" title="#{bundle.CreateUserTitle_password}" />
+
+                    <p:outputLabel value="Répeter mot de passe:" for="password2" />
+                    <p:password id="password2" value="#{utilisateurController.passord2}" title="Répeter mot de passe" />
+
+                    <f:facet name="footer">
+                        <p:commandButton actionListener="#{utilisateurController.create()}" id="submitButton" value="Valider" update="grid, :growld" />
+                        <p:commandButton actionListener="#{utilisateurController.goHome()}" id="annulerButton" value="Annuler" process="@this" />
+                    </f:facet>
+                </h:panelGrid> 
+            </h:form>
+        </p:panel>
+    </body>
+</html>
+

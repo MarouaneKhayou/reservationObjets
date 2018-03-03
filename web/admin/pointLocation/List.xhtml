@@ -48,14 +48,9 @@
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="Action"/>
-                            </f:facet> 
-                            <p:commandButton id="modifyButton" icon="ui-icon-plus" value="Modifier" actionListener="#{reservationController.prepareModification(item)}" 
-                                             update=":PointLocationViewForm" oncomplete="PF('PointLocationViewDialog').show()">
-                                <p:confirm header="Confirmation" message="Valider la réservation?" icon="ui-icon-alert" />
-                            </p:commandButton>
-                            <p:commandButton id="employesButton" icon="ui-icon-trash"  value="Employés" actionListener="#{reservationController.deleteReservationPanier(item)}" 
-                                             update=":ReservationListForm:datalist, :menuForm, :growl" style="background: red; margin-top: 0 !important;">
-                                <p:confirm header="Confirmation" message="Annuler la réservation?" icon="ui-icon-alert" />
+                            </f:facet>  
+                            <p:commandButton id="employesButton" value="Employés" actionListener="#{utilisateurController.showEmployes(item)}" 
+                                             style="margin-top: 0 !important;"> 
                             </p:commandButton>
                         </p:column>
                         <f:facet name="footer">

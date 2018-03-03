@@ -5,6 +5,7 @@
  */
 package service;
 
+import bean.PointLocation;
 import bean.Utilisateur;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -29,6 +30,16 @@ public class UtilisateurFacade extends AbstractFacade<Utilisateur> {
 
     public UtilisateurFacade() {
         super(Utilisateur.class);
+    }
+
+    /**
+     * Récuperer la liste des employés d'un point de location
+     *
+     * @param pointLocation: le point de location
+     * @return La liste des employés
+     */
+    public List<Utilisateur> getPointLocationEmployes(PointLocation pointLocation) {
+        return em.createQuery("SELECT u FROM Utilisateur AS u WHERE u.profile=1 AND u.pointLocation.id=" + pointLocation.getId()).getResultList();
     }
 
     /**
@@ -105,12 +116,36 @@ public class UtilisateurFacade extends AbstractFacade<Utilisateur> {
      * l'utilisateur est créer avec success
      */
     public int createNormalUser(Utilisateur utilisateur) {
+        return createUserTemplate(utilisateur, 0);
+    }
+
+    /**
+     * Créer un compte d'un employé
+     *
+     * @param utilisateur: l'utilisateur a créer
+     * @return -1: si l'email saisie est déjà existant, 1: si le compte de
+     * l'employé est créer avec success
+     */
+    public int createEmploye(Utilisateur utilisateur) {
+        return createUserTemplate(utilisateur, 1);
+    }
+
+    /**
+     * Methode privée qui permet la création d'un utilisateur utilisateur normal
+     * ou bine employé
+     *
+     * @param utilisateur: l'utilisateur
+     * @param profile: le profile 0: utilisateur normal, 1: employé
+     * @return -1: si l'email saisie est déjà existant, 1: si le compte de
+     * l'utilisateur est créer avec success
+     */
+    private int createUserTemplate(Utilisateur utilisateur, int profile) {
         if (ifMailExists(utilisateur.getEmail())) {
             return -1;
         }
         utilisateur.setEtatProfile(0);
         utilisateur.setPassword(PasswordUtil.getHashedPassword(utilisateur.getPassword()));
-        utilisateur.setProfile(0);
+        utilisateur.setProfile(profile);
         create(utilisateur);
         return 1;
     }

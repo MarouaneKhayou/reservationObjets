@@ -3,6 +3,7 @@ package controler;
 import bean.PointLocation;
 import controler.util.JsfUtil;
 import controler.util.JsfUtil.PersistAction;
+import java.io.IOException;
 import service.PointLocationFacade;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import util.SessionUtil;
 
 @Named("pointLocationController")
 @SessionScoped

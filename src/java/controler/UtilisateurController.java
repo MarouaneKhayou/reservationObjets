@@ -1,5 +1,6 @@
 package controler;
 
+import bean.PointLocation;
 import bean.Utilisateur;
 import controler.util.JsfUtil;
 import controler.util.JsfUtil.PersistAction;
@@ -36,8 +37,21 @@ public class UtilisateurController implements Serializable {
     private String newPassword;
     private String repeatPassword;
     private String recentPassword;
+    private PointLocation selectedPointLocation;
 
     public UtilisateurController() {
+    }
+
+    /**
+     * Afficher la liste des employés d'un point de location
+     *
+     * @param pointLocation: le point de location
+     * @throws IOException
+     */
+    public void showEmployes(PointLocation pointLocation) throws IOException {
+        this.selectedPointLocation = pointLocation;
+        this.items = getFacade().getPointLocationEmployes(pointLocation);
+        SessionUtil.redirect("/admin/employes/List.xhtml");
     }
 
     /**
@@ -238,6 +252,14 @@ public class UtilisateurController implements Serializable {
         return recentPassword;
     }
 
+    public PointLocation getSelectedPointLocation() {
+        return selectedPointLocation;
+    }
+
+    public void setSelectedPointLocation(PointLocation selectedPointLocation) {
+        this.selectedPointLocation = selectedPointLocation;
+    }
+
     public void setRecentPassword(String recentPassword) {
         this.recentPassword = recentPassword;
     }
@@ -283,13 +305,34 @@ public class UtilisateurController implements Serializable {
         initializeEmbeddableKey();
     }
 
-    public void create() {
+    public void createEmploye() {
         if (selected != null) {
             if (selected.getPassword().equals(passord2)) {
-                persist(PersistAction.CREATE, "Compte créé avec success");
+                selected.setProfile(1);
+                PointLocation pointLocation = new PointLocation();
+                System.out.println("zzzzzz " + pointLocation.getId());
+                pointLocation.setId(selectedPointLocation.getId());
+                selected.setPointLocation(selectedPointLocation);
+                persist(PersistAction.CREATE, "Compte créé avec success", true, false);
             } else {
                 JsfUtil.addErrorMessage("Les deux mots de passe doivent se correspondre");
             }
+        }
+    }
+
+    public void create() {
+        if (selected != null) {
+            if (selected.getEmail() == null | selected.getPassword().equals("") | passord2.equals("")) {
+                JsfUtil.addErrorMessage("Erreur de validation veuillez indiquer les champs obligatoires");
+            } else {
+                System.out.println("");
+                if (selected.getPassword().equals(passord2)) {
+                    persist(PersistAction.CREATE, "Compte créé avec success", false, true);
+                } else {
+                    JsfUtil.addErrorMessage("Les deux mots de passe doivent se correspondre");
+                }
+            }
+
         }
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
@@ -297,11 +340,11 @@ public class UtilisateurController implements Serializable {
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UtilisateurUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UtilisateurUpdated"), false, false);
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("UtilisateurDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("UtilisateurDeleted"), false, false);
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
@@ -325,18 +368,25 @@ public class UtilisateurController implements Serializable {
      * @param successMessage: le message à afficher si l'une des opération CUD
      * est effectué avec success
      */
-    private void persist(PersistAction persistAction, String successMessage) {
+    private void persist(PersistAction persistAction, String successMessage, boolean isEmploye, boolean redirectToLogin) {
         if (selected != null) {
             setEmbeddableKeys();
             try {
                 if (persistAction == PersistAction.CREATE) {
-                    int res = getFacade().createNormalUser(selected);
+                    int res;
+                    if (isEmploye) {
+                        res = getFacade().createEmploye(selected);
+                    } else {
+                        res = getFacade().createNormalUser(selected);
+                    }
                     if (res == -1) {
                         JsfUtil.addErrorMessage("Email saisie déja existant!");
                     } else if (res == 1) {
                         selected = new Utilisateur();
                         JsfUtil.addSuccessMessage(successMessage);
-                        util.SessionUtil.goLogin();
+                        if (redirectToLogin) {
+                            util.SessionUtil.goLogin();
+                        }
                     }
                 } else if (persistAction == PersistAction.UPDATE) {
                     getFacade().edit(selected);
@@ -373,6 +423,7 @@ public class UtilisateurController implements Serializable {
 
     public List<Utilisateur> getItemsAvailableSelectOne() {
         return getFacade().findAll();
+
     }
 
     @FacesConverter(forClass = Utilisateur.class)

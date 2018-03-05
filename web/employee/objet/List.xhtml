@@ -16,17 +16,12 @@
         <ui:define name="body">
             <h:form id="ObjetListForm">
                 <p:panel header="#{bundle.ListObjetTitle}">
-                    <p:dataTable id="datalist" value="#{objetController.items}" var="item"
-                                 selectionMode="single" selection="#{objetController.selected}"
+                    <p:dataTable id="datalist" value="#{objetController.getConnectedEmployeeObjets()}" var="item" 
                                  paginator="true"
                                  rowKey="#{item.id}"
                                  rows="10"
                                  rowsPerPageTemplate="10,20,30,40,50"
-                                 >
-
-                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
-                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
-
+                                 > 
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListObjetTitle_libelle}"/>
@@ -35,15 +30,15 @@
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListObjetTitle_id}"/>
+                                <h:outputText value="Identifiant"/>
                             </f:facet>
-                            <h:outputText value="#{item.id}"/>
+                            <h:outputText value="#{item.idObjet}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListObjetTitle_idObjet}"/>
+                                <h:outputText value="Catégorie"/>
                             </f:facet>
-                            <h:outputText value="#{item.idObjet}"/>
+                            <h:outputText value="#{item.categorie.nom}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
@@ -59,45 +54,45 @@
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListObjetTitle_amendeDepassement}"/>
+                                <h:outputText value="Amende dépassement journalere"/>
                             </f:facet>
                             <h:outputText value="#{item.amendeDepassement}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListObjetTitle_etatObjet}"/>
+                                <h:outputText value="Etat"/>
                             </f:facet>
-                            <h:outputText value="#{item.etatObjet}"/>
+                            <h:panelGroup rendered="#{item.etatObjet eq 0}" layout="block" style="width:80px;height:20px;background-color: green;font-weight: bold ;color: white;border:1px solid #000;text-align: center">
+                                Disponible
+                            </h:panelGroup> 
+                            <h:panelGroup rendered="#{item.etatObjet eq 1}" layout="block" style="width:80px;height:20px;background-color: hotpink;font-weight: bold ;color: white;border:1px solid #000;text-align: center">
+                                Réservé
+                            </h:panelGroup> 
+                            <h:panelGroup rendered="#{item.etatObjet eq 2}" style="width:80px;height:20px;background-color: red;font-weight: bold ;color: white;border:1px solid #000;text-align: center" layout="block" >
+                                Loué
+                            </h:panelGroup> 
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListObjetTitle_defauts}"/>
+                                <h:outputText value="Défauts"/>
                             </f:facet>
                             <h:outputText value="#{item.defauts}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListObjetTitle_description}"/>
+                                <h:outputText value="Déscription"/>
                             </f:facet>
                             <h:outputText value="#{item.description}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListObjetTitle_categorie}"/>
+                                <h:outputText value="Action"/>
                             </f:facet>
-                            <h:outputText value="#{item.categorie}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListObjetTitle_pointLocation}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.pointLocation}"/>
+                            <p:commandButton id="editButton" actionListener="#{objetController.prepareEdit(item)}" style="margin-top: 0 !important;"
+                                             icon="ui-icon-pencil" value="Modifier" update=":ObjetEditForm" oncomplete="PF('ObjetEditDialog').show()" disabled="#{item.etatObjet != 0}"/>
                         </p:column>
                         <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{objetController.prepareCreate}" update=":ObjetCreateForm" oncomplete="PF('ObjetCreateDialog').show()"/>
-                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":ObjetViewForm" oncomplete="PF('ObjetViewDialog').show()" disabled="#{empty objetController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":ObjetEditForm" oncomplete="PF('ObjetEditDialog').show()" disabled="#{empty objetController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{objetController.destroy}" update=":growl,datalist" disabled="#{empty objetController.selected}"/>
+                            <p:commandButton id="createButton" icon="ui-icon-plus" value="#{bundle.Create}" actionListener="#{objetController.prepareCreate}" update=":ObjetCreateForm" oncomplete="PF('ObjetCreateDialog').show()"/>
                         </f:facet>
                     </p:dataTable>
                 </p:panel>

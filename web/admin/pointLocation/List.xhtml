@@ -50,7 +50,11 @@
                                 <h:outputText value="Action"/>
                             </f:facet>  
                             <p:commandButton id="employesButton" value="Employés" actionListener="#{utilisateurController.showEmployes(item)}" 
-                                             style="margin-top: 0 !important;"> 
+                                             style="margin-top: 0 !important; " icon="ui-icon-plus" > 
+                            </p:commandButton>
+                            <p:commandButton id="modifyButton" value="Modifier" actionListener="#{pointLocationController.prepareModification(item)}" 
+                                             style="margin-top: 0 !important; " update=":PointLocationEditForm" icon="ui-icon-plus" 
+                                             oncomplete="PF('PointLocationEditDialog').show()"> 
                             </p:commandButton>
                         </p:column>
                         <f:facet name="footer">

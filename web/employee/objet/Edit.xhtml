@@ -14,36 +14,21 @@
                     <p:panelGrid columns="2" rendered="#{objetController.selected != null}">
                         <p:outputLabel value="#{bundle.EditObjetLabel_libelle}" for="libelle" />
                         <p:inputText id="libelle" value="#{objetController.selected.libelle}" title="#{bundle.EditObjetTitle_libelle}" />
-                        <p:outputLabel value="#{bundle.EditObjetLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{objetController.selected.id}" title="#{bundle.EditObjetTitle_id}" />
-                        <p:outputLabel value="#{bundle.EditObjetLabel_idObjet}" for="idObjet" />
-                        <p:inputText id="idObjet" value="#{objetController.selected.idObjet}" title="#{bundle.EditObjetTitle_idObjet}" />
+                        
                         <p:outputLabel value="#{bundle.EditObjetLabel_prixLocation}" for="prixLocation" />
                         <p:inputText id="prixLocation" value="#{objetController.selected.prixLocation}" title="#{bundle.EditObjetTitle_prixLocation}" />
+                        
                         <p:outputLabel value="#{bundle.EditObjetLabel_caution}" for="caution" />
                         <p:inputText id="caution" value="#{objetController.selected.caution}" title="#{bundle.EditObjetTitle_caution}" />
+                        
                         <p:outputLabel value="#{bundle.EditObjetLabel_amendeDepassement}" for="amendeDepassement" />
                         <p:inputText id="amendeDepassement" value="#{objetController.selected.amendeDepassement}" title="#{bundle.EditObjetTitle_amendeDepassement}" />
-                        <p:outputLabel value="#{bundle.EditObjetLabel_etatObjet}" for="etatObjet" />
-                        <p:inputText id="etatObjet" value="#{objetController.selected.etatObjet}" title="#{bundle.EditObjetTitle_etatObjet}" />
+                        
                         <p:outputLabel value="#{bundle.EditObjetLabel_defauts}" for="defauts" />
-                        <p:inputText id="defauts" value="#{objetController.selected.defauts}" title="#{bundle.EditObjetTitle_defauts}" />
+                        <p:inputTextarea id="defauts" value="#{objetController.selected.defauts}" title="#{bundle.EditObjetTitle_defauts}" />
+                        
                         <p:outputLabel value="#{bundle.EditObjetLabel_description}" for="description" />
-                        <p:inputText id="description" value="#{objetController.selected.description}" title="#{bundle.EditObjetTitle_description}" />
-                        <p:outputLabel value="#{bundle.EditObjetLabel_categorie}" for="categorie" />
-                        <p:selectOneMenu id="categorie" value="#{objetController.selected.categorie}" >
-                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{categorieController.itemsAvailableSelectOne}"
-                                           var="categorieItem"
-                                           itemValue="#{categorieItem}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="#{bundle.EditObjetLabel_pointLocation}" for="pointLocation" />
-                        <p:selectOneMenu id="pointLocation" value="#{objetController.selected.pointLocation}" >
-                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{pointLocationController.itemsAvailableSelectOne}"
-                                           var="pointLocationItem"
-                                           itemValue="#{pointLocationItem}"/>
-                        </p:selectOneMenu>
+                        <p:inputTextarea id="description" value="#{objetController.selected.description}" title="#{bundle.EditObjetTitle_description}" /> 
                     </p:panelGrid>
                     <p:commandButton actionListener="#{objetController.update}" value="#{bundle.Save}" update="display,:ObjetListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ObjetEditDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="ObjetEditDialog.hide()"/>

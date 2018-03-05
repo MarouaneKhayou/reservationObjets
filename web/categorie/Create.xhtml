@@ -8,19 +8,17 @@
 
     <ui:composition>
 
-        <p:dialog id="CategorieCreateDlg" widgetVar="CategorieCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateCategorieTitle}">
+        <p:dialog id="CategorieCreateDlg" widgetVar="CategorieCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="Nouvelle catégorie">
             <h:form id="CategorieCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{categorieController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateCategorieLabel_description}" for="description" />
-                        <p:inputText id="description" value="#{categorieController.selected.description}" title="#{bundle.CreateCategorieTitle_description}" />
                         <p:outputLabel value="#{bundle.CreateCategorieLabel_nom}" for="nom" />
                         <p:inputText id="nom" value="#{categorieController.selected.nom}" title="#{bundle.CreateCategorieTitle_nom}" />
-                        <p:outputLabel value="#{bundle.CreateCategorieLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{categorieController.selected.id}" title="#{bundle.CreateCategorieTitle_id}" />
+                        <p:outputLabel value="#{bundle.CreateCategorieLabel_description}" for="description" />
+                        <p:inputText id="description" value="#{categorieController.selected.description}" title="#{bundle.CreateCategorieTitle_description}" />
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{categorieController.create}" value="#{bundle.Save}" update="display,:CategorieListForm:datalist,:growl" oncomplete="handleSubmit(args,'CategorieCreateDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="CategorieCreateDialog.hide()"/>
+                    <p:commandButton actionListener="#{categorieController.create}" value="Valider" update="display,:CategorieListForm:datalist,:growl" oncomplete="handleSubmit(args,'CategorieCreateDialog');"/>
+                    <p:commandButton value="Annuler" onclick="CategorieCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

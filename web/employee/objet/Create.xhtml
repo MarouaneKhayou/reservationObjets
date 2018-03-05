@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ObjetCreateDlg" widgetVar="ObjetCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="Création d'un nouveau objet">
+            <h:form id="ObjetCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{objetController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateObjetLabel_libelle}" for="libelle" />
+                        <p:inputText id="libelle" value="#{objetController.selected.libelle}" required="true" title="#{bundle.CreateObjetTitle_libelle}" />
+                        <p:outputLabel value="#{bundle.CreateObjetLabel_categorie}" for="categorie" />
+                        <p:selectOneMenu id="categorie" value="#{objetController.selected.categorie}" >
+                            <f:selectItems value="#{categorieController.itemsAvailableSelectOne}"
+                                           var="categorieItem" itemLabel="#{categorieItem.nom}"
+                                           itemValue="#{categorieItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateObjetLabel_prixLocation}" for="prixLocation" />
+                        <p:inputText id="prixLocation" value="#{objetController.prixLocationTemplate}" required="true" title="#{bundle.CreateObjetTitle_prixLocation}" />
+                        <p:outputLabel value="#{bundle.CreateObjetLabel_caution}" for="caution" />
+                        <p:inputText id="caution" value="#{objetController.cautionTemplate}" required="true" title="#{bundle.CreateObjetTitle_caution}" />
+                        <p:outputLabel value="#{bundle.CreateObjetLabel_amendeDepassement}" for="amendeDepassement" />
+                        <p:inputText id="amendeDepassement" value="#{objetController.amendeDepassementTemplate}" required="true" title="#{bundle.CreateObjetTitle_amendeDepassement}" />
+                        <p:outputLabel value="#{bundle.CreateObjetLabel_defauts}" for="defauts" />
+                        <p:inputTextarea id="defauts" value="#{objetController.selected.defauts}" title="#{bundle.CreateObjetTitle_defauts}" />
+                        <p:outputLabel value="#{bundle.CreateObjetLabel_description}" for="description" />
+                        <p:inputTextarea id="description" value="#{objetController.selected.description}" title="#{bundle.CreateObjetTitle_description}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{objetController.create}" value="#{bundle.Save}" update="display,:ObjetListForm:datalist,:growl" oncomplete="handleSubmit(args,'ObjetCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ObjetCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -24,7 +24,7 @@
                         <p:submenu label="#{bundle.Maintenance}">
                             <p:menuitem value="Categorie" outcome="/categorie/List.xhtml" />
                             <p:menuitem value="Configuration" outcome="/admin/configuration/List.xhtml" />
-                            <p:menuitem value="Objet" outcome="/objet/List.xhtml" />
+                            <p:menuitem value="Objet" outcome="/employee/objet/List.xhtml" />
                             <p:menuitem value="PointLocation" outcome="/admin/pointLocation/List.xhtml" />
                             <p:menuitem value="Reservation" outcome="/reservation/List.xhtml" />
                             <p:menuitem value="Utilisateur" outcome="/utilisateur/List.xhtml" />
@@ -33,8 +33,10 @@
                         <p:menuitem value="Mon compte" outcome="/utilisateur/profil.xhtml" rendered="#{utilisateurController.isUserNormal()}" icon="ui-icon-home"/>
                         <p:menuitem value="Réservation" outcome="/reservation/List.xhtml" rendered="#{utilisateurController.isUserNormal()}" icon="ui-icon-home"/>
 
+                        <p:menuitem value="Objets" outcome="/employee/objet/List.xhtml" rendered="#{utilisateurController.isUserEmploye()}" icon="ui-icon-home"/>
+                        <p:menuitem value="Réservation" outcome="/reservation/List.xhtml" rendered="#{utilisateurController.isUserEmploye()}" icon="ui-icon-home"/>
+
                         <p:menuitem value="Points de location" outcome="/admin/pointLocation/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-home"/>
-                        <p:menuitem value="Employés" outcome="/admin/pointLocation/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-home"/>
                         <p:menuitem value="Configuration" outcome="/admin/pointLocation/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-home"/>
 
                         <f:facet name="options">

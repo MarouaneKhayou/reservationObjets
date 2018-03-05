@@ -1,6 +1,8 @@
 package controler;
 
+import bean.Categorie;
 import bean.Objet;
+import bean.PointLocation;
 import controler.util.JsfUtil;
 import controler.util.JsfUtil.PersistAction;
 import service.ObjetFacade;
@@ -18,6 +20,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import util.RandomId;
+import util.SessionUtil;
 
 @Named("objetController")
 @SessionScoped
@@ -27,8 +31,78 @@ public class ObjetController implements Serializable {
     private service.ObjetFacade ejbFacade;
     private List<Objet> items = null;
     private Objet selected;
+    private String prixLocationTemplate;
+    private String cautionTemplate;
+    private String amendeDepassementTemplate;
+    private Categorie categorie;
+    private PointLocation pointLocation;
+    private String libelle;
 
     public ObjetController() {
+    }
+
+    public boolean ifAvailible(Objet objet) {
+        return objet.getEtatObjet() == 0;
+    }
+
+    public boolean ifisReservated(Objet objet) {
+        return objet.getEtatObjet() == 1;
+    }
+
+    public List<Objet> getConnectedEmployeeObjets() {
+        return getFacade().getObjectsByCriteres(SessionUtil.getConnectedUser().getPointLocation(), -1);
+    }
+
+    public void seachObjets() {
+        items = getFacade().getObjectsByCriteres(libelle, categorie, pointLocation);
+    }
+
+    public Categorie getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
+    }
+
+    public PointLocation getPointLocation() {
+        return pointLocation;
+    }
+
+    public void setPointLocation(PointLocation pointLocation) {
+        this.pointLocation = pointLocation;
+    }
+
+    public String getLibelle() {
+        return libelle;
+    }
+
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public String getPrixLocationTemplate() {
+        return prixLocationTemplate;
+    }
+
+    public void setPrixLocationTemplate(String prixLocationTemplate) {
+        this.prixLocationTemplate = prixLocationTemplate;
+    }
+
+    public String getCautionTemplate() {
+        return cautionTemplate;
+    }
+
+    public void setCautionTemplate(String cautionTemplate) {
+        this.cautionTemplate = cautionTemplate;
+    }
+
+    public String getAmendeDepassementTemplate() {
+        return amendeDepassementTemplate;
+    }
+
+    public void setAmendeDepassementTemplate(String amendeDepassementTemplate) {
+        this.amendeDepassementTemplate = amendeDepassementTemplate;
     }
 
     public Objet getSelected() {
@@ -49,14 +123,37 @@ public class ObjetController implements Serializable {
         return ejbFacade;
     }
 
+    public void prepareView(Objet objet) {
+        selected = objet;
+    }
+
+    public void prepareEdit(Objet objet) {
+        selected = objet;
+    }
+
     public Objet prepareCreate() {
         selected = new Objet();
+        prixLocationTemplate = "";
+        cautionTemplate = "";
+        amendeDepassementTemplate = "";
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ObjetCreated"));
+        try {
+            Double prixLocation = new Double(prixLocationTemplate);
+            Double caution = new Double(prixLocationTemplate);
+            Double amendeDepassement = new Double(prixLocationTemplate);
+            selected.setPrixLocation(prixLocation);
+            selected.setCaution(caution);
+            selected.setAmendeDepassement(amendeDepassement);
+            selected.setPointLocation(SessionUtil.getConnectedUser().getPointLocation());
+            persist(PersistAction.CREATE, "Objet créé avec success");
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage("Erreur de validation de la valeur de l'un des champs");
+        }
+
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
@@ -85,10 +182,16 @@ public class ObjetController implements Serializable {
         if (selected != null) {
             setEmbeddableKeys();
             try {
-                if (persistAction != PersistAction.DELETE) {
+                if (persistAction == PersistAction.CREATE) {
+                    String idObjet;
+                    do {
+                        idObjet = RandomId.getRandomAlphanumricId(12);
+                    } while (getFacade().ifObjetIdExists(idObjet));
+                    selected.setIdObjet(idObjet);
+                    selected.setEtatObjet(0);
                     getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
+                } else if (persistAction == PersistAction.UPDATE) {
+                    getFacade().edit(selected);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {

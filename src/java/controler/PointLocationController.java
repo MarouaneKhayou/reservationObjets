@@ -33,6 +33,10 @@ public class PointLocationController implements Serializable {
     public PointLocationController() {
     }
 
+    public void prepareModification(PointLocation pointLocation) {
+        selected = pointLocation;
+    }
+
     public PointLocation getSelected() {
         return selected;
     }

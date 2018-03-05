@@ -23,42 +23,42 @@
                     <p:ajax event="toggle" />
                     <h:panelGrid columns="10" cellpadding="15" columnClasses="className">
                         <p:outputLabel value="Nom: " for="name" />
-                        <p:inputText id="name" value="#{restaurantController.nameRestaurant}" title="#{bundle.CreateUserTitle_firstName}" />
+                        <p:inputText id="name" value="#{objetController.libelle}" title="Nom de l'objet" />
 
                         <p:outputLabel value="Catégorie: " for="categorie" />
-                        <p:selectOneMenu id="categorie" value="#{restaurantController.category}" >
-                            <f:selectItem value="#{null}" itemLabel="----"/>
+                        <p:selectOneMenu id="categorie" value="#{objetController.categorie}" >
+                            <f:selectItem value="#{null}" itemLabel="--SELECTIONNER--"/>
                             <f:selectItems value="#{categorieController.itemsAvailableSelectOne}"
                                            var="categoryItem"
                                            itemValue="#{categoryItem}" itemLabel="#{categoryItem.nom}"/>
                         </p:selectOneMenu>
-                        
+
                         <p:outputLabel value="Point de location: " for="pointLocation" />
-                        <p:selectOneMenu id="pointLocation" value="#{utilisateurController.selected.pointLocation}" >
+                        <p:selectOneMenu id="pointLocation" value="#{objetController.pointLocation}" >
+                            <f:selectItem value="#{null}" itemLabel="--SELECTIONNER--"/>
                             <f:selectItems value="#{pointLocationController.itemsAvailableSelectOne}"
-                                           var="pointLocationItem"
+                                           var="pointLocationItem" itemLabel="#{pointLocationItem.nom}"
                                            itemValue="#{pointLocationItem}"/>
                         </p:selectOneMenu>
-                        <p:commandButton  style="margin-top: 0 !important;" actionListener="#{restaurantController.searchAnnonce}" update="restaurants" icon="ui-icon-circle-zoomin"  value="Chercher" />
+                        <p:commandButton  style="margin-top: 0 !important;" actionListener="#{objetController.seachObjets}" update="objets" icon="ui-icon-circle-zoomin"  value="Chercher" />
                     </h:panelGrid>
                 </p:fieldset>
-                <p:dataGrid var="restaurant" value="#{restaurantController.items}" columns="2"
-                            rows="12" paginator="true" id="restaurants" emptyMessage="Aucun objet trouvé"
+                <p:dataGrid var="objet" value="#{objetController.items}" columns="2"
+                            rows="12" paginator="true" id="objets" emptyMessage="Aucun objet trouvé"
                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                             rowsPerPageTemplate="6,12,16">
-                    <p:panel id="basic" header="#{restaurant.city.name} | #{restaurant.category.name}" style="margin-top:40px; display: table">
+                    <p:panel id="basic" header="#{objet.libelle} | #{objet.categorie.nom}" style="margin-top:40px; display: table">
                         <h:panelGrid columns="1" cellpadding="150" style="background-image: url('page_accueil_site.jpg')">
                             <h:outputText style="color: white;font-weight: bold; font-size: xx-large;"  
-                                          value="#{restaurant.name}" />
+                                          value="#{objet.libelle}" />
                         </h:panelGrid>
                         <f:facet name="footer" >
-                            <p:commandButton actionListener="#{reservationController.redirectToRestaurantDetail(restaurant)}" value="Détail" style="margin-top: 0 !important;">
-                                <f:param name="rest" value="restaurant" />
-                            </p:commandButton>
-                        </f:facet>
+                            <p:commandButton value="Détail" actionListener="#{objetController.prepareView(objet)}" oncomplete="PF('ObjetViewDialog').show()" style="margin-top: 0 !important;" />
+                        </f:facet> 
                     </p:panel>
                 </p:dataGrid>
             </h:form>
+            <ui:include src="/employee/objet/View.xhtml"/>
         </ui:define>
     </ui:composition>
 

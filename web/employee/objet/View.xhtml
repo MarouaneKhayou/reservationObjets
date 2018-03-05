@@ -8,16 +8,14 @@
 
     <ui:composition>
 
-        <p:dialog id="ObjetViewDlg" widgetVar="ObjetViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewObjetTitle}">
+        <p:dialog id="ObjetViewDlg" widgetVar="ObjetViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{objetController.selected.libelle}">
             <h:form id="ObjetViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{objetController.selected != null}">
                         <h:outputText value="#{bundle.ViewObjetLabel_libelle}"/>
                         <h:outputText value="#{objetController.selected.libelle}" title="#{bundle.ViewObjetTitle_libelle}"/>
-                        <h:outputText value="#{bundle.ViewObjetLabel_id}"/>
-                        <h:outputText value="#{objetController.selected.id}" title="#{bundle.ViewObjetTitle_id}"/>
-                        <h:outputText value="#{bundle.ViewObjetLabel_idObjet}"/>
-                        <h:outputText value="#{objetController.selected.idObjet}" title="#{bundle.ViewObjetTitle_idObjet}"/>
+                        <h:outputText value="#{bundle.ViewObjetLabel_categorie}"/>
+                        <h:outputText value="#{objetController.selected.categorie.nom}" title="#{bundle.ViewObjetTitle_categorie}"/>
                         <h:outputText value="#{bundle.ViewObjetLabel_prixLocation}"/>
                         <h:outputText value="#{objetController.selected.prixLocation}" title="#{bundle.ViewObjetTitle_prixLocation}"/>
                         <h:outputText value="#{bundle.ViewObjetLabel_caution}"/>
@@ -30,12 +28,11 @@
                         <h:outputText value="#{objetController.selected.defauts}" title="#{bundle.ViewObjetTitle_defauts}"/>
                         <h:outputText value="#{bundle.ViewObjetLabel_description}"/>
                         <h:outputText value="#{objetController.selected.description}" title="#{bundle.ViewObjetTitle_description}"/>
-                        <h:outputText value="#{bundle.ViewObjetLabel_categorie}"/>
-                        <h:outputText value="#{objetController.selected.categorie}" title="#{bundle.ViewObjetTitle_categorie}"/>
                         <h:outputText value="#{bundle.ViewObjetLabel_pointLocation}"/>
-                        <h:outputText value="#{objetController.selected.pointLocation}" title="#{bundle.ViewObjetTitle_pointLocation}"/>
+                        <h:outputText value="#{objetController.selected.pointLocation.nom} | #{objetController.selected.pointLocation.adresse} " title="#{bundle.ViewObjetTitle_pointLocation}"/>
                     </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="ObjetViewDialog.hide()"/>
+                    <p:commandButton value="Réserver" onclick="ObjetViewDialog.hide()" rendered="#{not empty utilisateurController.connectedUser}" icon="ui-icon-plus"/>
+                    <p:commandButton value="Fermer" style="background: red" onclick="ObjetViewDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

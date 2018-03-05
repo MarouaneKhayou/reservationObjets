@@ -16,8 +16,6 @@
                         <p:inputText id="nom" value="#{pointLocationController.selected.nom}" title="#{bundle.CreatePointLocationTitle_nom}" />
                         <p:outputLabel value="#{bundle.CreatePointLocationLabel_adresse}" for="adresse" />
                         <p:inputText id="adresse" value="#{pointLocationController.selected.adresse}" title="#{bundle.CreatePointLocationTitle_adresse}" />
-                        <p:outputLabel value="#{bundle.CreatePointLocationLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{pointLocationController.selected.id}" title="#{bundle.CreatePointLocationTitle_id}" />
                     </p:panelGrid>
                     <p:commandButton actionListener="#{pointLocationController.create}" value="#{bundle.Save}" update="display,:PointLocationListForm:datalist,:growl" oncomplete="handleSubmit(args,'PointLocationCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="PointLocationCreateDialog.hide()"/>

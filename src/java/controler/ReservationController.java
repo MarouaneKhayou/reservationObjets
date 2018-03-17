@@ -1,9 +1,9 @@
 package controler;
 
+import bean.Objet;
 import bean.Reservation;
 import controler.util.JsfUtil;
 import controler.util.JsfUtil.PersistAction;
-import service.ReservationFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,17 +18,49 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import service.ReservationsFacade;
+import util.SessionUtil;
 
 @Named("reservationController")
 @SessionScoped
 public class ReservationController implements Serializable {
 
     @EJB
-    private service.ReservationFacade ejbFacade;
+    private ReservationsFacade ejbFacade;
+    @EJB
+    private service.ConfigurationFacade configurationFacade;
     private List<Reservation> items = null;
     private Reservation selected;
+    private Objet objet;
+    private Integer dureeLocation;
 
     public ReservationController() {
+    }
+
+    public void getUserReservations(Objet objet) {
+        items = getFacade().getUserReservations(SessionUtil.getConnectedUser());
+    }
+
+    public void prepareReservation(Objet objet) {
+        this.objet = objet;
+        selected.setDureeLocation(configurationFacade.getDureeMinLocation().getValeur());
+        System.out.println(selected.getDureeLocation());
+    }
+
+    public Integer getDureeLocation() {
+        return dureeLocation;
+    }
+
+    public void setDureeLocation(Integer dureeLocation) {
+        this.dureeLocation = dureeLocation;
+    }
+
+    public Objet getObjet() {
+        return objet;
+    }
+
+    public void setObjet(Objet objet) {
+        this.objet = objet;
     }
 
     public Reservation getSelected() {
@@ -45,7 +77,7 @@ public class ReservationController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private ReservationFacade getFacade() {
+    private ReservationsFacade getFacade() {
         return ejbFacade;
     }
 
@@ -55,19 +87,38 @@ public class ReservationController implements Serializable {
         return selected;
     }
 
+    public void prepareModification() {
+        dureeLocation = selected.getDureeLocation();
+    }
+
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ReservationCreated"));
+        if (selected.getDureeLocation() < configurationFacade.getDureeMinLocation().getValeur()
+                | selected.getDureeLocation() > configurationFacade.getDureeMinLocation().getValeur()) {
+            JsfUtil.addErrorMessage("Durée de location incorrect");
+        } else {
+            persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ReservationCreated"));
+        }
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
+    public void updateDureeLocation() {
+        try {
+            getFacade().updateReservationDureeLocation(selected, dureeLocation);
+            JsfUtil.addSuccessMessage("Réservation modifiée avec sucess");
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+        }
+    }
+
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ReservationUpdated"));
+        persist(PersistAction.UPDATE, "Réservation modifiée avec sucess");
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ReservationDeleted"));
+        persist(PersistAction.DELETE, "Réservation supprimée avec sucess");
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
@@ -76,9 +127,14 @@ public class ReservationController implements Serializable {
 
     public List<Reservation> getItems() {
         if (items == null) {
-            items = getFacade().findAll();
+            items = getFacade().getUserReservations(SessionUtil.getConnectedUser());
+            selected = null;
         }
         return items;
+    }
+
+    public void setItems(List<Reservation> items) {
+        this.items = items;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -88,7 +144,7 @@ public class ReservationController implements Serializable {
                 if (persistAction != PersistAction.DELETE) {
                     getFacade().edit(selected);
                 } else {
-                    getFacade().remove(selected);
+                    getFacade().removeReservation(selected);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
@@ -140,7 +196,7 @@ public class ReservationController implements Serializable {
             return key;
         }
 
-        String getStringKey(java.lang.String value) {
+        String getStringKey(java.lang.Long value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();

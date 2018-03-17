@@ -6,6 +6,7 @@
 package service;
 
 import bean.Configuration;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,29 @@ public class ConfigurationFacade extends AbstractFacade<Configuration> {
     public ConfigurationFacade() {
         super(Configuration.class);
     }
-    
+
+    private Configuration getConfigurationByNameTemplate(String nom) {
+        List<Configuration> res = em.createQuery("SELECT c FROM Configuration AS c WHERE c.nom='" + nom + "'").getResultList();
+        if (res.isEmpty()) {
+            return new Configuration();
+        }
+        return res.get(0);
+
+    }
+
+    public Configuration getDureeMinLocation() {
+        return getConfigurationByNameTemplate("NDmL");
+    }
+
+    public Configuration getAmendeDepassementJournaliere() {
+        return getConfigurationByNameTemplate("ADJ");
+    }
+
+    public Configuration getNombreMaxObjetLoue() {
+        return getConfigurationByNameTemplate("NMOL");
+    }
+
+    public Configuration getDureeMaxLocation() {
+        return getConfigurationByNameTemplate("NDML");
+    }
 }

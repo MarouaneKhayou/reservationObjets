@@ -25,8 +25,17 @@ public class Configuration implements Serializable {
     private Long id;
     private String nom;
     private String description;
+    private Integer valeur;
 
     public Configuration() {
+    }
+
+    public Integer getValeur() {
+        return valeur;
+    }
+
+    public void setValeur(Integer valeur) {
+        this.valeur = valeur;
     }
 
     public String getDescription() {

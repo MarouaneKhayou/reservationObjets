@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ReservationViewDlg" widgetVar="ReservationViewDialog" modal="true" resizable="false" appendTo="@(body)" header="Détail">
+            <h:form id="ReservationViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{reservationController.selected != null}">
+                        <h:outputText value="Identifiant"/>
+                        <h:outputText value="#{reservationController.selected.idReservation} "/>
+
+                        <h:outputText value="#{bundle.ViewReservationLabel_objet}"/>
+                        <h:outputText value="#{reservationController.selected.objet.idObjet}" title="#{bundle.ViewReservationTitle_objet}"/>
+
+                        <h:outputText value="Libelle"/>
+                        <h:outputText value="#{reservationController.selected.objet.libelle} "/>
+
+                        <h:outputText value="Prix journalier"/>
+                        <h:outputText value="#{reservationController.selected.objet.prixLocation} "/>
+
+                        <h:outputText value="Amende journaliere"/>
+                        <h:outputText value="#{reservationController.selected.objet.prixLocation} "/>
+
+                        <h:outputText value="Point de location"/>
+                        <h:outputText value="#{reservationController.selected.objet.pointLocation.nom} "/>
+
+                        <h:outputText value="Description"/>
+                        <h:outputText value="#{reservationController.selected.objet.description} "/>
+
+                        <h:outputText value="Défauts"/>
+                        <h:outputText value="#{reservationController.selected.objet.defauts} "/> 
+                    </p:panelGrid>
+                    <p:commandButton value="Fermer" onclick="ReservationViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

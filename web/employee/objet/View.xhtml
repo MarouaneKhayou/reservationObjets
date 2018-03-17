@@ -11,7 +11,7 @@
         <p:dialog id="ObjetViewDlg" widgetVar="ObjetViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{objetController.selected.libelle}">
             <h:form id="ObjetViewForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{objetController.selected != null}">
+                    <p:panelGrid columns="2" >
                         <h:outputText value="#{bundle.ViewObjetLabel_libelle}"/>
                         <h:outputText value="#{objetController.selected.libelle}" title="#{bundle.ViewObjetTitle_libelle}"/>
                         <h:outputText value="#{bundle.ViewObjetLabel_categorie}"/>
@@ -31,7 +31,8 @@
                         <h:outputText value="#{bundle.ViewObjetLabel_pointLocation}"/>
                         <h:outputText value="#{objetController.selected.pointLocation.nom} | #{objetController.selected.pointLocation.adresse} " title="#{bundle.ViewObjetTitle_pointLocation}"/>
                     </p:panelGrid>
-                    <p:commandButton value="Réserver" onclick="ObjetViewDialog.hide()" rendered="#{not empty utilisateurController.connectedUser}" icon="ui-icon-plus"/>
+                    <p:commandButton value="Réserver" actionListener="#{reservationController.prepareReservation(objetController.selected)}" rendered="#{not empty utilisateurController.connectedUser}" 
+                                     oncomplete="PF('ReservationCreateDialog').show(); PF('ObjetViewDialog').hide();" icon="ui-icon-plus"/>
                     <p:commandButton value="Fermer" style="background: red" onclick="ObjetViewDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

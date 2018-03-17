@@ -11,16 +11,18 @@
         <p:dialog id="ConfigurationCreateDlg" widgetVar="ConfigurationCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateConfigurationTitle}">
             <h:form id="ConfigurationCreateForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{configurationController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateConfigurationLabel_description}" for="description" />
-                        <p:inputText id="description" value="#{configurationController.selected.description}" title="#{bundle.CreateConfigurationTitle_description}" />
-                        <p:outputLabel value="#{bundle.CreateConfigurationLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{configurationController.selected.id}" title="#{bundle.CreateConfigurationTitle_id}" />
+                    <p:panelGrid columns="2" rendered="#{configurationController.selected != null}">           
                         <p:outputLabel value="#{bundle.CreateConfigurationLabel_nom}" for="nom" />
                         <p:inputText id="nom" value="#{configurationController.selected.nom}" title="#{bundle.CreateConfigurationTitle_nom}" />
+
+                        <p:outputLabel value="#{bundle.CreateConfigurationLabel_description}" for="description" />
+                        <p:inputText id="description" value="#{configurationController.selected.description}" title="#{bundle.CreateConfigurationTitle_description}" />
+
+                        <p:outputLabel value="Valeur" for="valeur" />
+                        <p:inputText id="valeur" value="#{configurationController.selected.valeur}" title="#{bundle.CreateConfigurationTitle_description}" />
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{configurationController.create}" value="#{bundle.Save}" update="display,:ConfigurationListForm:datalist,:growl" oncomplete="handleSubmit(args,'ConfigurationCreateDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="ConfigurationCreateDialog.hide()"/>
+                    <p:commandButton actionListener="#{configurationController.create}" value="Valider" update="display,:ConfigurationListForm:datalist,:growl" oncomplete="handleSubmit(args,'ConfigurationCreateDialog');"/>
+                    <p:commandButton value="Annuler" onclick="ConfigurationCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

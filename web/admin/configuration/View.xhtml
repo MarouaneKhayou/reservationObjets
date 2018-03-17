@@ -12,14 +12,16 @@
             <h:form id="ConfigurationViewForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{configurationController.selected != null}">
-                        <h:outputText value="#{bundle.ViewConfigurationLabel_description}"/>
-                        <h:outputText value="#{configurationController.selected.description}" title="#{bundle.ViewConfigurationTitle_description}"/>
-                        <h:outputText value="#{bundle.ViewConfigurationLabel_id}"/>
-                        <h:outputText value="#{configurationController.selected.id}" title="#{bundle.ViewConfigurationTitle_id}"/>
                         <h:outputText value="#{bundle.ViewConfigurationLabel_nom}"/>
                         <h:outputText value="#{configurationController.selected.nom}" title="#{bundle.ViewConfigurationTitle_nom}"/>
+
+                        <h:outputText value="#{bundle.ViewConfigurationLabel_description}"/>
+                        <h:outputText value="#{configurationController.selected.description}" title="#{bundle.ViewConfigurationTitle_description}"/>
+
+                        <h:outputText value="Valeur"/>
+                        <h:outputText value="#{configurationController.selected.valeur}" title="#{bundle.ViewConfigurationTitle_description}"/> 
                     </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="ConfigurationViewDialog.hide()"/>
+                    <p:commandButton value="Fermer" onclick="ConfigurationViewDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

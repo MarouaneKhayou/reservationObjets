@@ -31,6 +31,14 @@ public class ConfigurationController implements Serializable {
     public ConfigurationController() {
     }
 
+    public Configuration getDureeMinLocation() {
+        return getFacade().getDureeMinLocation();
+    }
+
+    public Configuration getDureeMaxLocation() {
+        return getFacade().getDureeMaxLocation();
+    }
+
     public Configuration getSelected() {
         return selected;
     }

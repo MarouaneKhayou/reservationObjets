@@ -3,11 +3,16 @@ package controler;
 import bean.Categorie;
 import bean.Objet;
 import bean.PointLocation;
+import bean.Reservation;
+import bean.Utilisateur;
 import controler.util.JsfUtil;
 import controler.util.JsfUtil.PersistAction;
+import java.io.IOException;
 import service.ObjetFacade;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -20,6 +25,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.primefaces.context.RequestContext;
+import service.ConfigurationFacade;
+import service.ReservationsFacade;
+import service.UtilisateurFacade;
 import util.RandomId;
 import util.SessionUtil;
 
@@ -28,7 +37,14 @@ import util.SessionUtil;
 public class ObjetController implements Serializable {
 
     @EJB
-    private service.ObjetFacade ejbFacade;
+    private ObjetFacade ejbFacade;
+    @EJB
+    private ConfigurationFacade configurationFacade;
+    @EJB
+    private ReservationsFacade reservationsFacade;
+    @EJB
+    private UtilisateurFacade utilisateurFacade;
+
     private List<Objet> items = null;
     private Objet selected;
     private String prixLocationTemplate;
@@ -37,8 +53,98 @@ public class ObjetController implements Serializable {
     private Categorie categorie;
     private PointLocation pointLocation;
     private String libelle;
+    private Reservation reservation;
+    private boolean showDialgue = false;
 
     public ObjetController() {
+    }
+
+    public void initParams() {
+        items = null;
+        categorie = null;
+        pointLocation = null;
+        libelle = "";
+    }
+
+    public void prepareCreateReservation() {
+        reservation = new Reservation();
+    }
+
+    /**
+     * Réserver un objet
+     */
+    public void reserverObjet() {
+        System.out.println(reservation.getDureeLocation());
+        //Test si la valeur entrée pour la durée de location est correcte 
+        if (reservation.getDureeLocation() < configurationFacade.getDureeMinLocation().getValeur()
+                | reservation.getDureeLocation() > configurationFacade.getDureeMaxLocation().getValeur()) {
+            JsfUtil.addErrorMessage("Durée de location incorrect");
+        } else {
+            try {
+                Utilisateur utilisateur = utilisateurFacade.getUserByMail(SessionUtil.getConnectedUser().getEmail());
+                int nombreReservationEncoure = reservationsFacade.getUserReservationsEncours(utilisateur).size();
+
+                //On test si le nombre de réservation en cours de l'utilisateur ne depasse pas le seuil 
+                if (nombreReservationEncoure > configurationFacade.getNombreMaxObjetLoue().getValeur()) {
+                    JsfUtil.addErrorMessage("Vous avez attient le nombre maximal des objets réserver en meme temps");
+                } else {
+                    String idReservation;
+                    do {
+                        idReservation = RandomId.getRandomAlphanumricId(12);
+                    } while (reservationsFacade.ifReservationIdExists(idReservation));
+
+                    reservation.setIdReservation(idReservation);
+                    reservation.setDureeMaxLocationAppliquee(configurationFacade.getDureeMaxLocation().getValeur());
+                    reservation.setDureeMinLocationAppliquee(configurationFacade.getDureeMinLocation().getValeur());
+                    reservation.setEtatReservation(0);
+                    reservation.setDateEffectiveLocation(new Date());
+                    reservation.setUtilisateur(SessionUtil.getConnectedUser());
+
+                    reservation.setAmendeDepassementJournaliereAppliquee(configurationFacade.getAmendeDepassementJournaliere().getValeur());
+                    reservation.setDureeMaxLocationAppliquee(configurationFacade.getDureeMaxLocation().getValeur());
+                    reservation.setDureeMinLocationAppliquee(configurationFacade.getDureeMinLocation().getValeur());
+
+                    reservation.setObjet(selected);
+                    reservationsFacade.createReservation(reservation);
+                    showDialgue = true;
+                    SessionUtil.goUserReservations();
+
+                    //reservation.setDateLimiteRecuperation(dateLimiteRecuperation);
+                    //reservation.setId(libelle); 
+                }
+
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, "Erreur systeme !");
+            }
+        }
+    }
+
+    public void showReservationConfirmDialogue() {
+        if (showDialgue) {
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('myDialogVar').show();");
+            showDialgue = false;
+        }
+    }
+
+    public Reservation getReservation() {
+        if (reservation == null) {
+            reservation = new Reservation();
+        }
+        return reservation;
+    }
+
+    public void goHome() {
+        try {
+            SessionUtil.goHome();
+        } catch (IOException ex) {
+            Logger.getLogger(ObjetController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 
     public boolean ifAvailible(Objet objet) {
@@ -58,6 +164,9 @@ public class ObjetController implements Serializable {
     }
 
     public Categorie getCategorie() {
+        if (categorie == null) {
+            categorie = new Categorie();
+        }
         return categorie;
     }
 
@@ -66,6 +175,9 @@ public class ObjetController implements Serializable {
     }
 
     public PointLocation getPointLocation() {
+        if (pointLocation == null) {
+            pointLocation = new PointLocation();
+        }
         return pointLocation;
     }
 
@@ -74,6 +186,9 @@ public class ObjetController implements Serializable {
     }
 
     public String getLibelle() {
+        if (libelle == null) {
+            libelle = new String();
+        }
         return libelle;
     }
 
@@ -106,6 +221,9 @@ public class ObjetController implements Serializable {
     }
 
     public Objet getSelected() {
+        if (selected == null) {
+            selected = new Objet();
+        }
         return selected;
     }
 
@@ -123,8 +241,10 @@ public class ObjetController implements Serializable {
         return ejbFacade;
     }
 
-    public void prepareView(Objet objet) {
+    public String prepareView(Objet objet) {
         selected = objet;
+        System.out.println("prepare : " + selected.getLibelle());
+        return "/utilisateur/objet/Details.xhtml";
     }
 
     public void prepareEdit(Objet objet) {
@@ -173,7 +293,7 @@ public class ObjetController implements Serializable {
 
     public List<Objet> getItems() {
         if (items == null) {
-            items = getFacade().findAll();
+            items = getFacade().getObjectsByCriteres(null, null, null);
         }
         return items;
     }

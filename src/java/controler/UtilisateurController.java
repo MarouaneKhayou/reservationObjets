@@ -314,6 +314,7 @@ public class UtilisateurController implements Serializable {
                 pointLocation.setId(selectedPointLocation.getId());
                 selected.setPointLocation(selectedPointLocation);
                 persist(PersistAction.CREATE, "Compte créé avec success", true, false);
+                this.items = getFacade().getPointLocationEmployes(pointLocation);
             } else {
                 JsfUtil.addErrorMessage("Les deux mots de passe doivent se correspondre");
             }

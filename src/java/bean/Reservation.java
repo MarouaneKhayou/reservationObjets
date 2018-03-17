@@ -7,6 +7,7 @@ package bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +24,9 @@ public class Reservation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String idReservation;
     private int dureeLocation;
     private int dureeEffectiveLocation;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -38,6 +41,7 @@ public class Reservation implements Serializable {
     private Double amendeDegradation;
     private int dureeMaxLocationAppliquee;
     private int dureeMinLocationAppliquee;
+    private int amendeDepassementJournaliereAppliquee;
     private Double prixTotal;
     @ManyToOne
     private Objet objet;
@@ -45,6 +49,22 @@ public class Reservation implements Serializable {
     private Utilisateur utilisateur;
 
     public Reservation() {
+    }
+
+    public String getIdReservation() {
+        return idReservation;
+    }
+
+    public void setIdReservation(String idReservation) {
+        this.idReservation = idReservation;
+    }
+
+    public int getAmendeDepassementJournaliereAppliquee() {
+        return amendeDepassementJournaliereAppliquee;
+    }
+
+    public void setAmendeDepassementJournaliereAppliquee(int amendeDepassementJournaliereAppliquee) {
+        this.amendeDepassementJournaliereAppliquee = amendeDepassementJournaliereAppliquee;
     }
 
     public Utilisateur getUtilisateur() {
@@ -151,29 +171,34 @@ public class Reservation implements Serializable {
         this.prixTotal = prixTotal;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reservation)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Reservation other = (Reservation) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Reservation other = (Reservation) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;

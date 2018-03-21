@@ -54,4 +54,8 @@ public class ConfigurationFacade extends AbstractFacade<Configuration> {
     public Configuration getDureeMaxLocation() {
         return getConfigurationByNameTemplate("NDML");
     }
+
+    public Configuration getDureeMaxReservation() {
+        return getConfigurationByNameTemplate("NDMR");
+    }
 }

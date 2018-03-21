@@ -1,6 +1,7 @@
 package controler;
 
 import bean.PointLocation;
+import bean.Reservation;
 import bean.Utilisateur;
 import controler.util.JsfUtil;
 import controler.util.JsfUtil.PersistAction;
@@ -28,6 +29,8 @@ public class UtilisateurController implements Serializable {
 
     @EJB
     private service.UtilisateurFacade ejbFacade;
+    @EJB
+    private service.ReservationsFacade reservationsFacade;
     private List<Utilisateur> items = null;
     private Utilisateur selected;
     private String passord2;
@@ -38,8 +41,55 @@ public class UtilisateurController implements Serializable {
     private String repeatPassword;
     private String recentPassword;
     private PointLocation selectedPointLocation;
+    private String email;
 
     public UtilisateurController() {
+    }
+
+    /**
+     * La liste des réservations en cours
+     *
+     * @return : la liste des réservations en cours
+     */
+    public List<Reservation> getUserReservations() {
+        return reservationsFacade.getUserReservations(selected);
+    }
+
+    /**
+     * La liste des location en cours
+     *
+     * @return ; La liste des location en cours
+     */
+    public List<Reservation> getUserLocationsEncours() {
+        return reservationsFacade.getUserLocationsEncours(selected);
+    }
+
+    /**
+     * L'historique des locations
+     *
+     * @return ; la liste des location terminée
+     */
+    public List<Reservation> getAllUserLocations() {
+        return reservationsFacade.getAllUserLocations(selected);
+    }
+
+    public void seachUtilisateur() {
+        if (email.equals("")) {
+            JsfUtil.addErrorMessage("Veuillez saisir un email");
+        } else {
+            Utilisateur utilisateur = getFacade().getUserByMail(email);
+            if (utilisateur == null) {
+                JsfUtil.addErrorMessage("Utilisateur inexistant !");
+            } else {
+                selected = utilisateur;
+                try {
+                    SessionUtil.goUserProfile();
+                } catch (IOException ex) {
+                    JsfUtil.addErrorMessage("Erreur systeme!!");
+                    Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     /**
@@ -234,6 +284,17 @@ public class UtilisateurController implements Serializable {
 
     public String getNewPassword() {
         return newPassword;
+    }
+
+    public String getEmail() {
+        if (email == null) {
+            email = "";
+        }
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setNewPassword(String newPassword) {

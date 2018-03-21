@@ -30,6 +30,8 @@ public class Reservation implements Serializable {
     private int dureeLocation;
     private int dureeEffectiveLocation;
     @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateReservation;
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateEffectiveLocation;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateLimiteRetour;
@@ -49,6 +51,14 @@ public class Reservation implements Serializable {
     private Utilisateur utilisateur;
 
     public Reservation() {
+    }
+
+    public Date getDateReservation() {
+        return dateReservation;
+    }
+
+    public void setDateReservation(Date dateReservation) {
+        this.dateReservation = dateReservation;
     }
 
     public String getIdReservation() {

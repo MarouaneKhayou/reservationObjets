@@ -81,9 +81,22 @@
 
             <p:dialog id="myDialog" widgetVar="myDialogVar" showEffect="pop" header="Réservation effectuée"
                       modal="true" resizable="false" appendTo="@(body)">
-                <h:outputText value="Réservation effectué avec success !" /> <br/>
-                <h:outputText value="Identifiant de votre réservation : #{objetController.reservation.idReservation}" /> <br/>
-                <h:outputText value="Veuillez retirer votre objet!" /> 
+                <h:outputText  value="Réservation effectué avec success !" style="font-weight: bold"/> <hr/>
+
+                <h:outputText value="Identifiant de votre réservation : " />  
+                <h:outputText style="font-weight: bold" value="#{objetController.reservation.idReservation}" /><br/>
+
+                <h:outputText value="Objet à retiré depuis le point de location : " /> 
+                <h:outputText style="font-weight: bold" value="#{objetController.reservation.objet.pointLocation.nom}" /><br/>
+
+                <h:outputText value="A l'addresse suivante : " /> 
+                <h:outputText style="font-weight: bold" value="#{objetController.reservation.objet.pointLocation.adresse}" /><br/>
+
+                <h:outputText value="Au plus tard le : " /> 
+                <h:outputText style="font-weight: bold" value="#{objetController.reservation.dateLimiteRecuperation}"  >
+                    <f:convertDateTime pattern="dd-MM-yyyy" /> 
+                </h:outputText><br/>
+
                 <f:facet name="footer">
                     <h:form id="Dialogue">
                         <p:commandButton value="OK" type="button"  icon="ui-icon-check" onclick="PF('myDialogVar').hide();" />  

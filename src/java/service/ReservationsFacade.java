@@ -20,30 +20,44 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class ReservationsFacade extends AbstractFacade<Reservation> {
-    
+
     @PersistenceContext(unitName = "reservationObjetsPU")
     private EntityManager em;
     @EJB
     private ObjetFacade objetFacade;
-    
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     public List<Reservation> getUserReservationsEncours(Utilisateur utilisateur) {
         return getUserReservationByEtatTemplate(utilisateur, 0);
     }
-    
+
+    /**
+     * Modifier la durée d'une location
+     *
+     * @param reservation: la réservation
+     * @param dureeLocation: la nouvelle durée
+     */
     public void updateReservationDureeLocation(Reservation reservation, Integer dureeLocation) {
         em.createQuery("UPDATE Reservation AS r SET r.dureeLocation=" + dureeLocation).executeUpdate();
         reservation.setDureeLocation(dureeLocation);
     }
-    
+
     public List<Reservation> getUserReservations(Utilisateur utilisateur) {
         return getUserReservationByEtatTemplate(utilisateur, 0);
     }
-    
+
+    public List<Reservation> getUserLocationsEncours(Utilisateur utilisateur) {
+        return getUserReservationByEtatTemplate(utilisateur, 1);
+    }
+
+    public List<Reservation> getAllUserLocations(Utilisateur utilisateur) {
+        return getUserReservationByEtatTemplate(utilisateur, -1);
+    }
+
     private List<Reservation> getUserReservationByEtatTemplate(Utilisateur utilisateur, Integer etatReservation) {
         String req = "SELECT r FROM Reservation AS r WHERE r.utilisateur.id=" + utilisateur.getId();
         if (etatReservation != null) {
@@ -51,7 +65,7 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
         }
         return em.createQuery(req).getResultList();
     }
-    
+
     public ReservationsFacade() {
         super(Reservation.class);
     }
@@ -77,12 +91,12 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
         objetFacade.edit(reservation.getObjet());
         edit(reservation);
     }
-    
+
     public void removeReservation(Reservation selected) {
         Objet objet = objetFacade.find(selected.getObjet().getId());
         objet.setEtatObjet(0);
         objetFacade.edit(objet);
         remove(selected);
     }
-    
+
 }

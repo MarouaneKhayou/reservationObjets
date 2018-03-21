@@ -26,31 +26,31 @@
                             <p:panel header="Détail de l'objet" style="width: 360px; margin: auto; margin-top: 2%; margin-bottom: 5%; box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 
                                 <h:panelGrid id="loginPanel" columns="2">
-                                    <h:outputText value="#{bundle.ViewObjetLabel_libelle}" class="textBold"/>
+                                    <h:outputText value="Libellé" class="textBold"/>
                                     <h:outputText value="#{objetController.selected.libelle}" title="#{bundle.ViewObjetTitle_libelle}"/>
 
-                                    <h:outputText value="#{bundle.ViewObjetLabel_categorie}" class="textBold"/>
+                                    <h:outputText value="Catégorie" class="textBold"/>
                                     <h:outputText value="#{objetController.selected.categorie.nom}" title="#{bundle.ViewObjetTitle_categorie}"/>
 
-                                    <h:outputText value="#{bundle.ViewObjetLabel_prixLocation}" class="textBold"/>
+                                    <h:outputText value="Prix de location" class="textBold"/>
                                     <h:outputText value="#{objetController.selected.prixLocation}" title="#{bundle.ViewObjetTitle_prixLocation}"/>
 
-                                    <h:outputText value="#{bundle.ViewObjetLabel_caution}" class="textBold"/>
+                                    <h:outputText value="Caution" class="textBold"/>
                                     <h:outputText value="#{objetController.selected.caution}" title="#{bundle.ViewObjetTitle_caution}"/>
 
-                                    <h:outputText value="#{bundle.ViewObjetLabel_amendeDepassement}" class="textBold"/>
+                                    <h:outputText value="Amende dépassement" class="textBold"/>
                                     <h:outputText value="#{objetController.selected.amendeDepassement}" title="#{bundle.ViewObjetTitle_amendeDepassement}"/>
 
-                                    <h:outputText value="#{bundle.ViewObjetLabel_etatObjet}" class="textBold"/>
+                                    <h:outputText value="Etat de l'objet" class="textBold"/>
                                     <h:outputText value="#{objetController.selected.etatObjet}" title="#{bundle.ViewObjetTitle_etatObjet}"/>
 
-                                    <h:outputText value="#{bundle.ViewObjetLabel_defauts}" class="textBold"/>
+                                    <h:outputText value="Défauts" class="textBold"/>
                                     <h:outputText value="#{objetController.selected.defauts}" title="#{bundle.ViewObjetTitle_defauts}"/>
 
-                                    <h:outputText value="#{bundle.ViewObjetLabel_description}" class="textBold"/>
+                                    <h:outputText value="Déscription" class="textBold"/>
                                     <h:outputText value="#{objetController.selected.description}" title="#{bundle.ViewObjetTitle_description}"/>
 
-                                    <h:outputText value="#{bundle.ViewObjetLabel_pointLocation}" class="textBold"/>
+                                    <h:outputText value="Point de location" class="textBold"/>
                                     <h:outputText value="#{objetController.selected.pointLocation.nom} | #{objetController.selected.pointLocation.adresse} " title="#{bundle.ViewObjetTitle_pointLocation}"/> 
 
                                     <f:facet name="footer">

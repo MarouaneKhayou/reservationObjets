@@ -29,6 +29,7 @@ import org.primefaces.context.RequestContext;
 import service.ConfigurationFacade;
 import service.ReservationsFacade;
 import service.UtilisateurFacade;
+import util.DateUtil;
 import util.RandomId;
 import util.SessionUtil;
 
@@ -85,7 +86,7 @@ public class ObjetController implements Serializable {
                 int nombreReservationEncoure = reservationsFacade.getUserReservationsEncours(utilisateur).size();
 
                 //On test si le nombre de réservation en cours de l'utilisateur ne depasse pas le seuil 
-                if (nombreReservationEncoure > configurationFacade.getNombreMaxObjetLoue().getValeur()) {
+                if (nombreReservationEncoure >= configurationFacade.getNombreMaxObjetLoue().getValeur()) {
                     JsfUtil.addErrorMessage("Vous avez attient le nombre maximal des objets réserver en meme temps");
                 } else {
                     String idReservation;
@@ -97,8 +98,10 @@ public class ObjetController implements Serializable {
                     reservation.setDureeMaxLocationAppliquee(configurationFacade.getDureeMaxLocation().getValeur());
                     reservation.setDureeMinLocationAppliquee(configurationFacade.getDureeMinLocation().getValeur());
                     reservation.setEtatReservation(0);
-                    reservation.setDateEffectiveLocation(new Date());
+                    reservation.setDateReservation(new Date());
                     reservation.setUtilisateur(SessionUtil.getConnectedUser());
+                    
+                    reservation.setDateLimiteRecuperation(DateUtil.addDaysToDate(new Date(), configurationFacade.getDureeMaxReservation().getValeur()));
 
                     reservation.setAmendeDepassementJournaliereAppliquee(configurationFacade.getAmendeDepassementJournaliere().getValeur());
                     reservation.setDureeMaxLocationAppliquee(configurationFacade.getDureeMaxLocation().getValeur());

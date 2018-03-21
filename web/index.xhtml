@@ -43,7 +43,7 @@
                         </p:selectOneMenu>
                         <p:commandButton  style="margin-top: 0 !important;" actionListener="#{objetController.seachObjets}" update="objets" icon="ui-icon-circle-zoomin"  value="Chercher" />
                     </h:panelGrid>
-                </p:fieldset>
+                </p:fieldset> 
                 <p:dataGrid var="objet" value="#{objetController.items}" columns="2"
                             rows="12" paginator="true" id="objets" emptyMessage="Aucun objet trouvé"
                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

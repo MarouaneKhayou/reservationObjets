@@ -2,6 +2,9 @@
 <project xmlns="http://www.netbeans.org/ns/project/1">
     <type>org.netbeans.modules.web.project</type>
     <configuration>
+        <buildExtensions xmlns="http://www.netbeans.org/ns/ant-build-extender/1">
+            <extension file="rest-build.xml" id="rest.5"/>
+        </buildExtensions>
         <data xmlns="http://www.netbeans.org/ns/web-project/3">
             <name>reservationObjets</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
@@ -16,6 +19,46 @@
                 </library>
                 <library dirs="200">
                     <file>${file.reference.excite-bike-1.0.9.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jersey-client.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jersey-common.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jersey-container-servlet-core.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jersey-container-servlet.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jersey-hk2.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jersey-media-jaxb.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jersey-media-json-binding.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jersey-media-sse.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jersey-server.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.asm-3.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

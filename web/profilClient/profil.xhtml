@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListReservationTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="ReservationListForm">
+                <h:panelGrid columns="2" cellpadding="20" > 
+                    <p:panel id="basic" header="Utilisateur" style="margin-top:40px; display: table">
+                        <p:graphicImage value="../utilisateur/user.png" width="150" height="150" />
+                        <p:separator />
+                        <h:outputText style="display:block; font-weight: bold;" 
+                                      value="Nom : #{utilisateurController.selected.nom}" />
+                        <p:separator />
+                        <h:outputText style="display:block; font-weight: bold;"
+                                      value="Prénom : #{utilisateurController.selected.prenom }" />
+                        <p:separator />
+                        <h:outputText style="display:block; font-weight: bold;"
+                                      value="Email : #{utilisateurController.selected.email}" />
+                    </p:panel> 
+
+                    <h:panelGrid> 
+                        <p:panel header="Historique des locations">
+                            <p:dataTable id="datalist" value="#{utilisateurController.getAllUserLocations()}" var="item"
+                                         selectionMode="single" selection="#{reservationController.selected}"
+                                         paginator="true"
+                                         rowKey="#{item.id}" emptyMessage="Aucune location n'est effectuée"
+                                         rows="10"
+                                         rowsPerPageTemplate="10,20,30,40,50"
+                                         >
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Id objet"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.utilisateur}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Libellé"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.objet}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Date réservation"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.dureeLocation}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Date de récupération"/>
+                                    </f:facet>  
+                                    <h:outputText value="#{item.dateEffectiveLocation}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>                                
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Date de retour"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.dateEffectiveLocation}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Prix location/jour"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.dureeLocation}"/>
+                                </p:column>  
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Prix total"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.dureeLocation}"/>
+                                </p:column>  
+                            </p:dataTable>
+                        </p:panel>  
+                        <p:panel header="Locations en cours">
+                            <p:dataTable id="datalist2" value="#{utilisateurController.getUserLocationsEncours()}" var="item"
+                                         selectionMode="single" selection="#{reservationController.selected}"
+                                         paginator="true"
+                                         rowKey="#{item.id}"
+                                         rows="10" emptyMessage="Aucune location en cours"
+                                         rowsPerPageTemplate="10,20,30,40,50"
+                                         >
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Id objet"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.utilisateur}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Libellé"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.objet}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Date réservation"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.dureeLocation}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Date de récupération"/>
+                                    </f:facet>  
+                                    <h:outputText value="#{item.dateEffectiveLocation}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>                                
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Date limite de retour"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.dateEffectiveLocation}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column> 
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Prix de location/jour"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.dureeLocation}"/>
+                                </p:column>  
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Caution"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.dureeLocation}"/>
+                                </p:column> 
+                            </p:dataTable>
+                        </p:panel> 
+
+                        <p:panel header="Réservations en cours">
+                            <p:dataTable id="datalist3" value="#{utilisateurController.getUserReservations()}" var="item"
+                                         selectionMode="single" selection="#{reservationController.selected}"
+                                         paginator="true"
+                                         rowKey="#{item.id}"
+                                         rows="10" emptyMessage="Aucune réservation en cours"
+                                         rowsPerPageTemplate="10,20,30,40,50"
+                                         > 
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Id objet"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.objet.idObjet}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Libellé"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.objet.libelle}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Date réservation"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.dateReservation}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Date limite de récupération"/>
+                                    </f:facet>  
+                                    <h:outputText value="#{item.dateLimiteRecuperation}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>                                
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Durée de location"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.dureeLocation}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Prix de location/jour"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.objet.prixLocation}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Caution"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.objet.caution}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel> 
+                    </h:panelGrid> 
+                </h:panelGrid>
+            </h:form> 
+        </ui:define> 
+    </ui:composition>
+
+</html>

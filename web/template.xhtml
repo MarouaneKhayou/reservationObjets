@@ -40,7 +40,11 @@
                         <p:menuitem value="Catégories" outcome="/admin/categorie/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-home"/>
                         <p:menuitem value="Configuration" outcome="/admin/configuration/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-home"/>
 
-                        <f:facet name="options">
+                        <f:facet name="options"> 
+                            <p:inputText id="email" value="#{utilisateurController.email}" placeholder="Email utilisateur" title="Email de l'utilisateur"  rendered="#{utilisateurController.isUserConnected()}"  >
+                            </p:inputText>  
+                            <p:commandButton  style="margin-top: 0 !important;" actionListener="#{utilisateurController.seachUtilisateur}" rendered="#{utilisateurController.isUserConnected()}" update=":growl" icon="ui-icon-circle-zoomin"  />
+
                             <h:outputText style="font-weight: bold" rendered="#{utilisateurController.isUserConnected()}" value="Bonjour Mr/Mme. 
                                           #{utilisateurController.getConnectedUser().nom} #{utilisateurController.getConnectedUser().prenom} "/>
 

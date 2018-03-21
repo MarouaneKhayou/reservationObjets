@@ -28,6 +28,9 @@
                                 <p:outputLabel value="Email: " for="mail" />
                                 <p:inputText id="mail" placeholder="#{utilisateurController.connectedUser.email}" value="#{utilisateurController.newUser.email}" title="#{bundle.CreateUserTitle_mail}" />
 
+                                <p:outputLabel value="Addresse: " for="addresse" />
+                                <p:inputTextarea id="addresse" placeholder="#{utilisateurController.connectedUser.addresse}" value="#{utilisateurController.newUser.addresse}" />
+
                                 <f:facet name="footer">
                                     <p:commandButton actionListener="#{utilisateurController.updateUserInformation()}" id="submitButton" value="Valider" update=":menuForm, @(form)" /> 
                                 </f:facet>

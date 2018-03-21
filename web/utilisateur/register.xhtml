@@ -24,7 +24,10 @@
 
                     <p:outputLabel value="#{bundle.CreateUtilisateurLabel_email}" for="email" />
                     <p:inputText id="email" value="#{utilisateurController.selected.email}" required="true" title="#{bundle.CreateUtilisateurTitle_email}" />
- 
+
+                    <p:outputLabel value="Addresse" for="addresse" />
+                    <p:inputTextarea id="addresse" value="#{utilisateurController.selected.addresse}" title="Addresse" />
+
                     <p:outputLabel value="Mot de passe:" for="password1" />
                     <p:password id="password1" required="true" value="#{utilisateurController.selected.password}" title="#{bundle.CreateUserTitle_password}" />
 

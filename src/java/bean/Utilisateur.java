@@ -29,6 +29,7 @@ public class Utilisateur implements Serializable {
     private int etatProfile;
     private String email;
     private String password;
+    private String addresse;
     @ManyToOne
     private PointLocation pointLocation;
 
@@ -39,6 +40,14 @@ public class Utilisateur implements Serializable {
         this.etatProfile = 1;
         this.email = email;
         this.password = password;
+    }
+
+    public String getAddresse() {
+        return addresse;
+    }
+
+    public void setAddresse(String addresse) {
+        this.addresse = addresse;
     }
 
     public Utilisateur() {

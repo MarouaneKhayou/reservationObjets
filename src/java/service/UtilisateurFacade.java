@@ -70,7 +70,7 @@ public class UtilisateurFacade extends AbstractFacade<Utilisateur> {
      * @return -1: si le nouveau email est déjà exisrant, 1: si la modification
      * a bien été faite
      */
-    public int updateUserInformation(Utilisateur user, String firstName, String lastName, String mail) {
+    public int updateUserInformation(Utilisateur user, String firstName, String lastName, String mail, String addresse) {
         if (!mail.equals("")) {
             if (ifMailExists(mail)) {
                 return -1;
@@ -82,6 +82,9 @@ public class UtilisateurFacade extends AbstractFacade<Utilisateur> {
         }
         if (!lastName.equals("")) {
             user.setNom(lastName);
+        }
+        if (!addresse.equals("")) {
+            user.setAddresse(addresse);
         }
         edit(user);
         return 1;

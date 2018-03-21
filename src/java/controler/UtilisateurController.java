@@ -128,11 +128,12 @@ public class UtilisateurController implements Serializable {
      * Changer les information de l'utilsateur
      */
     public void updateUserInformation() {
-        if (newUser.getNom().equals("") & newUser.getPrenom().equals("") & newUser.getEmail().equals("")) {
+        if (newUser.getNom().equals("") & newUser.getPrenom().equals("") & newUser.getEmail().equals("")
+                & newUser.getAddresse().equals("")) {
             JsfUtil.addErrorMessage("Veuillez indroduire des informations");
         } else {
             int res = getFacade().updateUserInformation(getConnectedUser(), newUser.getPrenom(), newUser.getNom(),
-                    newUser.getEmail());
+                    newUser.getEmail(), newUser.getAddresse());
             if (res == -1) {
                 JsfUtil.addErrorMessage("Le mail saisie déjà existant");
             } else if (res == 1) {

@@ -54,7 +54,7 @@
                                     <h:outputText value="#{objetController.selected.pointLocation.nom} | #{objetController.selected.pointLocation.adresse} " title="#{bundle.ViewObjetTitle_pointLocation}"/> 
 
                                     <f:facet name="footer">
-                                        <p:commandButton value="Réserver" actionListener="#{objetController.prepareCreateReservation}" rendered="#{not empty utilisateurController.connectedUser}" 
+                                        <p:commandButton value="Réserver" actionListener="#{objetController.prepareCreateReservation}" rendered="#{utilisateurController.userNormal}" 
                                                          oncomplete="PF('ReservationCreateDialog').show();" icon="ui-icon-plus"/>
                                         <p:commandButton value="Page d'accueil" style="background: red" actionListener="#{objetController.goHome()}"/>
                                     </f:facet> 

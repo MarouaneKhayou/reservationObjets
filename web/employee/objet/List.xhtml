@@ -14,7 +14,24 @@
         </ui:define>
 
         <ui:define name="body">
+            #{objetController.initParams()} 
             <h:form id="ObjetListForm">
+                <p:fieldset legend="Filtre" toggleable="true" toggleSpeed="500">
+                    <p:ajax event="toggle" />
+                    <h:panelGrid columns="10" cellpadding="15" columnClasses="className">
+                        <p:outputLabel value="Nom: " for="name" />
+                        <p:inputText id="name" value="#{objetController.libelle}" title="Nom de l'objet" />
+
+                        <p:outputLabel value="Catégorie: " for="categorie" />
+                        <p:selectOneMenu id="categorie" value="#{objetController.categorie}" >
+                            <f:selectItem value="#{null}" itemLabel="--SELECTIONNER--"/>
+                            <f:selectItems value="#{categorieController.itemsAvailableSelectOne}"
+                                           var="categoryItem"
+                                           itemValue="#{categoryItem}" itemLabel="#{categoryItem.nom}"/>
+                        </p:selectOneMenu> 
+                        <p:commandButton  style="margin-top: 0 !important;" actionListener="#{objetController.seachObjets}" update="datalist" icon="ui-icon-circle-zoomin"  value="Chercher" />
+                    </h:panelGrid>
+                </p:fieldset> 
                 <p:panel header="#{bundle.ListObjetTitle}">
                     <p:dataTable id="datalist" value="#{objetController.getConnectedEmployeeObjets()}" var="item" 
                                  paginator="true"

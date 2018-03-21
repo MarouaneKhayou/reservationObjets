@@ -100,7 +100,7 @@ public class ObjetController implements Serializable {
                     reservation.setEtatReservation(0);
                     reservation.setDateReservation(new Date());
                     reservation.setUtilisateur(SessionUtil.getConnectedUser());
-                    
+
                     reservation.setDateLimiteRecuperation(DateUtil.addDaysToDate(new Date(), configurationFacade.getDureeMaxReservation().getValeur()));
 
                     reservation.setAmendeDepassementJournaliereAppliquee(configurationFacade.getAmendeDepassementJournaliere().getValeur());
@@ -159,17 +159,14 @@ public class ObjetController implements Serializable {
     }
 
     public List<Objet> getConnectedEmployeeObjets() {
-        return getFacade().getObjectsByCriteres(SessionUtil.getConnectedUser().getPointLocation(), -1);
+        return getFacade().getObjectsByCriteres(SessionUtil.getConnectedUser().getPointLocation(), -1, libelle, categorie);
     }
 
     public void seachObjets() {
         items = getFacade().getObjectsByCriteres(libelle, categorie, pointLocation);
     }
 
-    public Categorie getCategorie() {
-        if (categorie == null) {
-            categorie = new Categorie();
-        }
+    public Categorie getCategorie() { 
         return categorie;
     }
 

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Acceuil"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body" >
+            <style>
+                <!-- -->
+                .textBold{
+                    font-weight: bold;
+                } 
+            </style>
+            <h:form id="contratformContainer">
+                #{reservationController.initParams()}
+
+                <h:panelGrid id="container" columns="2" style="margin-left: auto; margin-right: auto;" >
+
+                    <p:panel header="Nouvel contrat de location" style="width: 360px; margin: auto; margin-top: 2%; margin-bottom: 5%; box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"> 
+                        <h:panelGrid id="loginPanel" columns="3">
+
+                            <p:outputLabel value="Identifiant réservation : " for="idReservation"/> 
+                            <p:inputText id="idReservation" value="#{reservationController.idReservation}"></p:inputText>
+
+                            <p:commandButton value="Afficher" icon="ui-icon-check" style="margin-top: 0 !important" update=":growl, reservationDetail" 
+                                             actionListener="#{reservationController.afficherReservation()}" /> 
+                        </h:panelGrid>
+                        <br/>
+                        <p:panelGrid id="reservationDetail" columns="2"> 
+                            <p:outputLabel style="display:block; font-weight: 600;" for="client"
+                                           value="Client : " />
+                            <h:outputText id="client" value=" #{reservationController.selected.utilisateur.nom} #{reservationController.selected.utilisateur.prenom}" 
+                                          style="font-weight: bold;"/>
+
+                            <p:outputLabel style="display:block; font-weight: 600;" for="libelleObjet"
+                                           value="Libelle objet : " />
+                            <h:outputText id="libelleObjet" value=" #{reservationController.selected.objet.libelle}" 
+                                          style="font-weight: bold;"/>
+
+                            <p:outputLabel style="display:block; font-weight: 600;" for="idObjet"
+                                           value="Identifiant objet : " />
+                            <h:outputText id="idObjet" value=" #{reservationController.selected.objet.idObjet}" 
+                                          style="font-weight: bold;"/>
+
+                            <p:outputLabel style="display:block; font-weight: 600;" for="dateReservation"
+                                           value="Date réservation : " /> 
+                            <h:outputText id="dateReservation" style="font-weight: bold;" 
+                                          value="#{reservationController.selected.dateReservation}">
+                                <f:convertDateTime pattern="dd-MM-yyyy" />
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <p:commandButton value="Ajouter" icon="ui-icon-plus" style="margin-top: 0 !important" update=":growl, reservationDetail, datalist, loginPanel" 
+                                                 actionListener="#{reservationController.ajouterReservation()}" disabled="#{not reservationController.isValidReservation}"/> 
+
+                            </f:facet>
+                        </p:panelGrid>                                 
+                    </p:panel>   
+                    <p:panel header="Objets" style="box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                        <p:dataTable id="datalist" value="#{reservationController.reservations}" var="item"
+                                     paginator="true" 
+                                     rowKey="#{item.id}"
+                                     rows="10" emptyMessage="Aucune réservation n'est selectionnée"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     >  
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Identifiant"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idReservation}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.ListReservationTitle_objet}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.objet.libelle}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Identifiant objet"/>
+                                </f:facet>
+                                <h:outputText value="#{item.objet.idObjet}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Durée de location"/>
+                                </f:facet>
+                                <h:outputText value="#{item.dureeLocation}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Supprimer"/>
+                                </f:facet>
+                                <p:commandButton id="supprimerButton" actionListener="#{reservationController.deleteReservation(item)}" 
+                                                 style="margin-top: 0 !important;" update=":growl, datalist"
+                                                 icon="ui-icon-trash" /> 
+                            </p:column>    
+                            <f:facet name="footer">
+                                <p:commandButton id="validerButton" icon="ui-icon-check"   value="Valider" 
+                                                 actionListener="#{reservationController.prepareValidation}" 
+                                                 update=":ReservationValiderForm" disabled="#{reservationController.reservations.size() eq 0}"
+                                                 oncomplete="PF('ReservationValiderDialog').show()"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>  
+                </h:panelGrid>
+            </h:form>
+            <ui:include src="valider.xhtml"/> 
+        </ui:define>
+    </ui:composition>
+
+</html>

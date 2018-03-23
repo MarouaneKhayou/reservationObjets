@@ -34,7 +34,7 @@
                         <p:menuitem value="Réservation" outcome="/utilisateur/reservation/List.xhtml" rendered="#{utilisateurController.isUserNormal()}" icon="ui-icon-home"/>
 
                         <p:menuitem value="Objets" outcome="/employee/objet/List.xhtml" rendered="#{utilisateurController.isUserEmploye()}" icon="ui-icon-home"/>
-                        <p:menuitem value="Réservation" outcome="/reservation/List.xhtml" rendered="#{utilisateurController.isUserEmploye()}" icon="ui-icon-home"/>
+                        <p:menuitem value="Contrat de location" outcome="/employee/contratLocation/create.xhtml" rendered="#{utilisateurController.isUserEmploye()}" icon="ui-icon-home"/>
 
                         <p:menuitem value="Points de location" outcome="/admin/pointLocation/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-home"/>
                         <p:menuitem value="Catégories" outcome="/admin/categorie/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-home"/>

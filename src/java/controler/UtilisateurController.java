@@ -52,7 +52,7 @@ public class UtilisateurController implements Serializable {
      * @return : la liste des réservations en cours
      */
     public List<Reservation> getUserReservations() {
-        return reservationsFacade.getUserReservations(selected);
+        return reservationsFacade.getUserReservations(selected, selectedPointLocation);
     }
 
     /**
@@ -61,7 +61,7 @@ public class UtilisateurController implements Serializable {
      * @return ; La liste des location en cours
      */
     public List<Reservation> getUserLocationsEncours() {
-        return reservationsFacade.getUserLocationsEncours(selected);
+        return reservationsFacade.getUserLocationsEncours(selected, selectedPointLocation);
     }
 
     /**
@@ -70,9 +70,16 @@ public class UtilisateurController implements Serializable {
      * @return ; la liste des location terminée
      */
     public List<Reservation> getAllUserLocations() {
-        return reservationsFacade.getAllUserLocations(selected);
+        return reservationsFacade.getAllUserLocations(selected, selectedPointLocation);
     }
 
+    public void initParams() {
+        selectedPointLocation = null;
+    }
+
+    /**
+     * Recherche d'un utilisateur
+     */
     public void seachUtilisateur() {
         if (email.equals("")) {
             JsfUtil.addErrorMessage("Veuillez saisir un email");

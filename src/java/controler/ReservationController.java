@@ -6,6 +6,8 @@ import controler.util.JsfUtil;
 import controler.util.JsfUtil.PersistAction;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -19,6 +21,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import service.ReservationsFacade;
+import util.DateUtil;
 import util.SessionUtil;
 
 @Named("reservationController")
@@ -31,14 +34,87 @@ public class ReservationController implements Serializable {
     private service.ConfigurationFacade configurationFacade;
     private List<Reservation> items = null;
     private Reservation selected;
+    private boolean isValidReservation = false;
     private Objet objet;
     private Integer dureeLocation;
+    private String idReservation;
+    private List<Reservation> reservations;
 
     public ReservationController() {
     }
 
+    public void afficherReservation() {
+        if (idReservation.equals("")) {
+            JsfUtil.addErrorMessage("Veuillez introduire une valeur");
+        } else {
+            selected = getFacade().getReservationById(idReservation);
+            if (selected == null) {
+                JsfUtil.addErrorMessage("Réservation inexistante !");
+                initParams();
+            } else if (selected.getEtatReservation() == 0) {
+                isValidReservation = true;
+            } else if (selected.getEtatReservation() == 1) {
+                JsfUtil.addErrorMessage("Réservation en cours de location");
+            } else if (selected.getEtatReservation() == 2) {
+                JsfUtil.addErrorMessage("Réservation terminée");
+            }
+        }
+    }
+
+    public void prepareValidation() {
+        reservations.stream().forEach((r) -> {
+            r.setDateRetrait(new Date());
+            r.setDateLimiteRetour(DateUtil.addDaysToDate(new Date(), r.getDureeLocation()));
+        });
+    }
+
+    public void validerContrat() {
+        reservations.stream().forEach((item) -> {
+            getFacade().validerContrat(item);
+        });
+        initParams();
+        JsfUtil.addSuccessMessage("Contrat validé avec success");
+    }
+
+    public void deleteReservation(Reservation reservation) {
+        System.out.println(reservation.getIdReservation());
+        reservations.remove(reservation);
+        JsfUtil.addSuccessMessage("Réservation supprimée!");
+    }
+
+    public void ajouterReservation() {
+        reservations.add(selected);
+        idReservation = "";
+        isValidReservation = false;
+        selected = new Reservation();
+        JsfUtil.addSuccessMessage("Réservation ajoutée avec success");
+    }
+
+    public void initParams() {
+        idReservation = "";
+        isValidReservation = false;
+        selected = new Reservation();
+        reservations = new ArrayList<>();
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public boolean isIsValidReservation() {
+        return isValidReservation;
+    }
+
+    public void setIsValidReservation(boolean isValidReservation) {
+        this.isValidReservation = isValidReservation;
+    }
+
     public void getUserReservations(Objet objet) {
-        items = getFacade().getUserReservations(SessionUtil.getConnectedUser());
+        items = getFacade().getUserReservations(SessionUtil.getConnectedUser(), null);
     }
 
     public void prepareReservation(Objet objet) {
@@ -79,6 +155,14 @@ public class ReservationController implements Serializable {
 
     private ReservationsFacade getFacade() {
         return ejbFacade;
+    }
+
+    public String getIdReservation() {
+        return idReservation;
+    }
+
+    public void setIdReservation(String idReservation) {
+        this.idReservation = idReservation;
     }
 
     public Reservation prepareCreate() {
@@ -127,7 +211,7 @@ public class ReservationController implements Serializable {
 
     public List<Reservation> getItems() {
         if (items == null) {
-            items = getFacade().getUserReservations(SessionUtil.getConnectedUser());
+            items = getFacade().getUserReservations(SessionUtil.getConnectedUser(), null);
             selected = null;
         }
         return items;

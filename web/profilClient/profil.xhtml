@@ -14,9 +14,16 @@
         </ui:define>
 
         <ui:define name="body">
+            #{utilisateurController.initParams()}
+            <style>
+                .alignTop {
+                    vertical-align: top;
+                }
+            </style>
             <h:form id="ReservationListForm">
-                <h:panelGrid columns="2" cellpadding="20" > 
-                    <p:panel id="basic" header="Utilisateur" style="margin-top:40px; display: table">
+
+                <h:panelGrid columns="2" cellpadding="20" columnClasses="alignTop, alignTop" > 
+                    <p:panel id="basic" header="Utilisateur" style="display: table">
                         <p:graphicImage value="../utilisateur/user.png" width="150" height="150" />
                         <p:separator />
                         <h:outputText style="display:block; font-weight: bold;" 
@@ -33,6 +40,19 @@
                     </p:panel> 
 
                     <h:panelGrid> 
+                        <p:fieldset legend="Filtrer" toggleable="true" toggleSpeed="500" >
+                            <p:ajax event="toggle" />
+                            <h:panelGrid columns="10" cellpadding="15" columnClasses="className">  
+                                <p:outputLabel value="Point de location: " for="pointLocation" />
+                                <p:selectOneMenu id="pointLocation" value="#{utilisateurController.selectedPointLocation}" >
+                                    <f:selectItem value="#{null}" itemLabel="--SELECTIONNER--"/>
+                                    <f:selectItems value="#{pointLocationController.itemsAvailableSelectOne}"
+                                                   var="pointLocationItem" itemLabel="#{pointLocationItem.nom}"
+                                                   itemValue="#{pointLocationItem}"/>
+                                </p:selectOneMenu>
+                                <p:commandButton  style="margin-top: 0 !important;" update="ReservationListForm" icon="ui-icon-circle-zoomin"  value="Chercher" />
+                            </h:panelGrid>
+                        </p:fieldset> 
                         <p:panel header="Historique des locations">
                             <p:dataTable id="datalist" value="#{utilisateurController.getAllUserLocations()}" var="item"
                                          selectionMode="single" selection="#{reservationController.selected}"
@@ -103,25 +123,27 @@
                                     <f:facet name="header">
                                         <h:outputText value="Id objet"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.utilisateur}"/>
+                                    <h:outputText value="#{item.objet.idObjet}"/>
                                 </p:column>
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Libellé"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.objet}"/>
+                                    <h:outputText value="#{item.objet.libelle}"/>
                                 </p:column>
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Date réservation"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.dureeLocation}"/>
+                                    <h:outputText value="#{item.dateReservation}" > 
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText> 
                                 </p:column>
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Date de récupération"/>
                                     </f:facet>  
-                                    <h:outputText value="#{item.dateEffectiveLocation}">
+                                    <h:outputText value="#{item.dateRetrait}">
                                         <f:convertDateTime pattern="dd-MM-yyyy" />
                                     </h:outputText>                                
                                 </p:column>
@@ -129,7 +151,7 @@
                                     <f:facet name="header">
                                         <h:outputText value="Date limite de retour"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.dateEffectiveLocation}">
+                                    <h:outputText value="#{item.dateLimiteRetour}">
                                         <f:convertDateTime pattern="dd-MM-yyyy" />
                                     </h:outputText>
                                 </p:column> 
@@ -137,20 +159,19 @@
                                     <f:facet name="header">
                                         <h:outputText value="Prix de location/jour"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.dureeLocation}"/>
+                                    <h:outputText value="#{item.objet.prixLocation}"/>
                                 </p:column>  
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Caution"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.dureeLocation}"/>
+                                    <h:outputText value="#{item.objet.caution}"/>
                                 </p:column> 
                             </p:dataTable>
                         </p:panel> 
 
                         <p:panel header="Réservations en cours">
-                            <p:dataTable id="datalist3" value="#{utilisateurController.getUserReservations()}" var="item"
-                                         selectionMode="single" selection="#{reservationController.selected}"
+                            <p:dataTable id="datalist3" value="#{utilisateurController.getUserReservations()}" var="item" 
                                          paginator="true"
                                          rowKey="#{item.id}"
                                          rows="10" emptyMessage="Aucune réservation en cours"

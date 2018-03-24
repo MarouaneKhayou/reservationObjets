@@ -19,7 +19,7 @@ public class SessionUtil {
     public static void goUserProfile() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.getFlash().setKeepMessages(true);
-        ec.redirect(ec.getRequestContextPath() + "/faces/profilClient/profil.xhtml");
+        ec.redirect(ec.getRequestContextPath() + "/faces/employee/profilClient/profil.xhtml");
     }
 
     private SessionUtil() {

@@ -24,8 +24,8 @@
                                  rowsPerPageTemplate="10,20,30,40,50"
                                  >
 
-                        <p:ajax event="rowSelect"   update="createButton viewButton editButton"/>
-                        <p:ajax event="rowUnselect" update="createButton viewButton editButton"/>
+                        <p:ajax event="rowSelect"   update="createButton editButton"/>
+                        <p:ajax event="rowUnselect" update="createButton editButton"/>
 
                         <p:column>
                             <f:facet name="header">
@@ -41,7 +41,6 @@
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="Créer" actionListener="#{categorieController.prepareCreate}" update=":CategorieCreateForm" oncomplete="PF('CategorieCreateDialog').show()"/>
-                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="Détail" update=":CategorieViewForm" oncomplete="PF('CategorieViewDialog').show()" disabled="#{empty categorieController.selected}"/>
                             <p:commandButton id="editButton"   icon="ui-icon-pencil" value="Modifier" update=":CategorieEditForm" oncomplete="PF('CategorieEditDialog').show()" disabled="#{empty categorieController.selected}"/>
                         </f:facet>
                     </p:dataTable>
@@ -49,8 +48,7 @@
             </h:form>
 
             <ui:include src="Create.xhtml"/>
-            <ui:include src="Edit.xhtml"/>
-            <ui:include src="View.xhtml"/>
+            <ui:include src="Edit.xhtml"/> 
         </ui:define>
     </ui:composition>
 

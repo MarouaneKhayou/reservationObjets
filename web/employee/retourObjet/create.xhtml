@@ -17,24 +17,25 @@
                 <!-- -->
                 .textBold{
                     font-weight: bold;
-                }  
-                .alignTop {
-                    vertical-align: top;
                 } 
             </style>
             <h:form id="contratformContainer">
                 #{reservationController.initParams()}
-
+                <style>
+                    .alignTop {
+                        vertical-align: top;
+                    }
+                </style>
                 <h:panelGrid id="container" columns="2" columnClasses="alignTop, alignTop" style="margin-left: auto; margin-right: auto;" >
 
-                    <p:panel header="Nouvel contrat de location" style="width: 360px; margin: auto;  margin-bottom: 5%; box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"> 
-                        <h:panelGrid id="loginPanel" columns="3">
+                    <p:panel header="Retour des objets" style="width: 360px; margin: auto; margin-bottom: 5%; box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"> 
+                        <h:panelGrid id="objetPanel" columns="3">
 
-                            <p:outputLabel value="Identifiant réservation : " for="idReservation"/> 
-                            <p:inputText id="idReservation" value="#{reservationController.idReservation}"></p:inputText>
+                            <p:outputLabel value="Identifiant objet : " for="idObjetS"/> 
+                            <p:inputText id="idObjetS" value="#{reservationController.idObjet}"></p:inputText>
 
                             <p:commandButton value="Afficher" icon="ui-icon-check" style="margin-top: 0 !important" update=":growl, reservationDetail" 
-                                             actionListener="#{reservationController.afficherReservation()}" /> 
+                                             actionListener="#{reservationController.afficherObjet()}" /> 
                         </h:panelGrid>
                         <br/>
                         <p:panelGrid id="reservationDetail" columns="2"> 
@@ -53,6 +54,11 @@
                             <h:outputText id="idObjet" value=" #{reservationController.selected.objet.idObjet}" 
                                           style="font-weight: bold;"/>
 
+                            <p:outputLabel style="display:block; font-weight: 600;" for="description"
+                                           value="Descrition objet : " />
+                            <h:outputText id="description" value=" #{reservationController.selected.objet.description}" 
+                                          style="font-weight: bold;"/>
+
                             <p:outputLabel style="display:block; font-weight: 600;" for="dateReservation"
                                            value="Date réservation : " /> 
                             <h:outputText id="dateReservation" style="font-weight: bold;" 
@@ -60,13 +66,13 @@
                                 <f:convertDateTime pattern="dd-MM-yyyy" />
                             </h:outputText>
                             <f:facet name="footer">
-                                <p:commandButton value="Ajouter" icon="ui-icon-plus" style="margin-top: 0 !important" update=":growl, reservationDetail, datalist, loginPanel" 
+                                <p:commandButton value="Ajouter" icon="ui-icon-plus" style="margin-top: 0 !important" update=":growl, reservationDetail, datalist, objetPanel" 
                                                  actionListener="#{reservationController.ajouterReservation()}" disabled="#{not reservationController.isValidReservation}"/> 
 
                             </f:facet>
                         </p:panelGrid>                                 
                     </p:panel>   
-                    <p:panel header="Objets" style="box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                    <p:panel id="reservationsPanel" header="Objets" style="box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                         <p:dataTable id="datalist" value="#{reservationController.reservations}" var="item"
                                      paginator="true" 
                                      rowKey="#{item.id}"
@@ -93,10 +99,10 @@
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Durée de location"/>
+                                    <h:outputText value="Amende dégradation"/>
                                 </f:facet>
-                                <h:outputText value="#{item.dureeLocation}"/>
-                            </p:column>
+                                <p:inputText id="amende" value="#{item.amendeDegradation}" /> 
+                            </p:column> 
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Supprimer"/>
@@ -107,12 +113,23 @@
                             </p:column>    
                             <f:facet name="footer">
                                 <p:commandButton id="validerButton" icon="ui-icon-check"   value="Valider" 
-                                                 actionListener="#{reservationController.prepareValidation}" 
-                                                 update=":ReservationValiderForm" disabled="#{reservationController.reservations.size() eq 0}"
+                                                 actionListener="#{reservationController.prepareObjetRetourValidation}" 
+                                                 update=":ReservationValiderForm, :growl" disabled="#{reservationController.reservations.size() eq 0 or empty reservationController.dateRetour}"
                                                  oncomplete="PF('ReservationValiderDialog').show()"/>
                             </f:facet>
                         </p:dataTable>
-                    </p:panel>  
+                    </p:panel>
+                    <p:panel header="Date de retour" style="box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                        <h:panelGrid id="dateRetourGrid" columns="3"> 
+                            <p:outputLabel value="Date de retour : " for="dateRetour" />
+                            <p:calendar id="dateRetour" 
+                                        pattern="yyyy-MM-dd" value="#{reservationController.dateRetour}" 
+                                        title="Date de retour des objets"  showOn="button" >
+                                <p:ajax event="dateSelect" update="reservationsPanel" />
+                            </p:calendar>  
+                        </h:panelGrid>
+                    </p:panel>
+
                 </h:panelGrid>
             </h:form>
             <ui:include src="valider.xhtml"/> 

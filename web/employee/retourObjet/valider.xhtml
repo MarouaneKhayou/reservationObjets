@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ReservationValiderDlg" widgetVar="ReservationValiderDialog" modal="true" resizable="false" appendTo="@(body)" header="Valider le contrat de location">
+            <h:form id="ReservationValiderForm">  
+                <p:dataTable id="datalist" value="#{reservationController.reservations}" var="item" 
+                             paginator="true"
+                             rowKey="#{item.id}" emptyMessage="Aucune location n'est effectuée"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             >
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Id objet"/>
+                        </f:facet>
+                        <h:outputText value="#{item.objet.idObjet}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Libellé"/>
+                        </f:facet>
+                        <h:outputText value="#{item.objet.libelle}"/>
+                    </p:column>  
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Defauts"/>
+                        </f:facet>
+                        <h:outputText value="#{item.objet.defauts}">
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                        </h:outputText>
+                    </p:column>  
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Caution"/>
+                        </f:facet>
+                        <h:outputText value="#{item.objet.caution}"/>
+                    </p:column>  
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Durée de location"/>
+                        </f:facet>
+                        <h:outputText value="#{item.dureeLocation}"/>
+                    </p:column>  
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Durée effective de location"/>
+                        </f:facet>
+                        <h:outputText value="#{item.dureeEffectiveLocation}"/>
+                    </p:column> 
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Prix location/jour"/>
+                        </f:facet>
+                        <h:outputText value="#{item.objet.prixLocation}€"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Amende depassement"/>
+                        </f:facet>
+                        <h:outputText value="#{item.amendeDepassementJournaliereAppliquee}€"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Date de récupération"/>
+                        </f:facet>  
+                        <h:outputText value="#{item.dateRetrait}">
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                        </h:outputText>                                
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Date de retour"/>
+                        </f:facet>
+                        <h:outputText value="#{item.dateRetour}">
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                        </h:outputText>
+                    </p:column>  
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Prix de location"/>
+                        </f:facet>
+                        <h:outputText value="#{item.prixTotal}" />
+                     </p:column> 
+                    <f:facet name="footer">
+                        <p:commandButton actionListener="#{reservationController.validerRetourObjet()}" value="Valider" 
+                                         update=":contratformContainer, :growl" 
+                                         oncomplete="handleSubmit(args,'ReservationValiderDialog');"/>
+
+                        <p:commandButton value="Annuler" onclick="ReservationValiderDialog.hide()"/>
+                    </f:facet>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

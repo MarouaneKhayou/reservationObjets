@@ -30,20 +30,22 @@
                             <p:menuitem value="Utilisateur" outcome="/utilisateur/List.xhtml" />
                         </p:submenu>
 
-                        <p:menuitem value="Mon compte" outcome="/utilisateur/profil.xhtml" rendered="#{utilisateurController.isUserNormal()}" icon="ui-icon-home"/>
-                        <p:menuitem value="Réservation" outcome="/utilisateur/reservation/List.xhtml" rendered="#{utilisateurController.isUserNormal()}" icon="ui-icon-home"/>
+                        <p:menuitem value="Mon compte" outcome="/utilisateur/profil.xhtml" rendered="#{utilisateurController.isUserNormal()}" icon="ui-icon-gear"/>
+                        <p:menuitem value="Réservation" outcome="/utilisateur/reservation/List.xhtml" rendered="#{utilisateurController.isUserNormal()}" icon="ui-icon-cart"/>
+                        <p:menuitem value="Mon profil" outcome="/utilisateur/monProfil/profil.xhtml" rendered="#{utilisateurController.isUserNormal()}" icon="ui-icon-person"/>
 
-                        <p:menuitem value="Objets" outcome="/employee/objet/List.xhtml" rendered="#{utilisateurController.isUserEmploye()}" icon="ui-icon-home"/>
-                        <p:menuitem value="Contrat de location" outcome="/employee/contratLocation/create.xhtml" rendered="#{utilisateurController.isUserEmploye()}" icon="ui-icon-home"/>
+                        <p:menuitem value="Objets" outcome="/employee/objet/List.xhtml" rendered="#{utilisateurController.isUserEmploye()}" icon="ui-icon-suitcase"/>
+                        <p:menuitem value="Contrat de location" outcome="/employee/contratLocation/create.xhtml" rendered="#{utilisateurController.isUserEmploye()}" icon="ui-icon-clipboard"/>
+                        <p:menuitem value="Retour objet" outcome="/employee/retourObjet/create.xhtml" rendered="#{utilisateurController.isUserEmploye()}" icon="ui-icon-arrowrefresh-1-w"/>
 
-                        <p:menuitem value="Points de location" outcome="/admin/pointLocation/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-home"/>
-                        <p:menuitem value="Catégories" outcome="/admin/categorie/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-home"/>
-                        <p:menuitem value="Configuration" outcome="/admin/configuration/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-home"/>
+                        <p:menuitem value="Points de location" outcome="/admin/pointLocation/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-tag"/>
+                        <p:menuitem value="Catégories" outcome="/admin/categorie/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-gear"/>
+                        <p:menuitem value="Configuration" outcome="/admin/configuration/List.xhtml" rendered="#{utilisateurController.isUserAdmin()}" icon="ui-icon-wrench"/>
 
                         <f:facet name="options"> 
-                            <p:inputText id="email" value="#{utilisateurController.email}" placeholder="Email utilisateur" title="Email de l'utilisateur"  rendered="#{utilisateurController.isUserConnected()}"  >
+                            <p:inputText id="email" value="#{utilisateurController.email}" placeholder="Email utilisateur" title="Email de l'utilisateur"  rendered="#{utilisateurController.isUserEmploye()}"  >
                             </p:inputText>  
-                            <p:commandButton  style="margin-top: 0 !important;" actionListener="#{utilisateurController.seachUtilisateur}" rendered="#{utilisateurController.isUserConnected()}" update=":growl" icon="ui-icon-circle-zoomin"  />
+                            <p:commandButton  style="margin-top: 0 !important;" actionListener="#{utilisateurController.seachUtilisateur}" rendered="#{utilisateurController.isUserEmploye()}" update=":growl" icon="ui-icon-circle-zoomin"  />
 
                             <h:outputText style="font-weight: bold" rendered="#{utilisateurController.isUserConnected()}" value="Bonjour Mr/Mme. 
                                           #{utilisateurController.getConnectedUser().nom} #{utilisateurController.getConnectedUser().prenom} "/>

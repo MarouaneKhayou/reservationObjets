@@ -77,6 +77,10 @@ public class UtilisateurController implements Serializable {
         selectedPointLocation = null;
     }
 
+    public void initConnectedUser() {
+        selected = SessionUtil.getConnectedUser();
+    }
+
     /**
      * Recherche d'un utilisateur
      */

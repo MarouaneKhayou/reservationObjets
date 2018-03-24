@@ -75,7 +75,6 @@ public class ObjetController implements Serializable {
      * Réserver un objet
      */
     public void reserverObjet() {
-        System.out.println(reservation.getDureeLocation());
         //Test si la valeur entrée pour la durée de location est correcte 
         if (reservation.getDureeLocation() < configurationFacade.getDureeMinLocation().getValeur()
                 | reservation.getDureeLocation() > configurationFacade.getDureeMaxLocation().getValeur()) {
@@ -106,6 +105,7 @@ public class ObjetController implements Serializable {
                     reservation.setAmendeDepassementJournaliereAppliquee(configurationFacade.getAmendeDepassementJournaliere().getValeur());
                     reservation.setDureeMaxLocationAppliquee(configurationFacade.getDureeMaxLocation().getValeur());
                     reservation.setDureeMinLocationAppliquee(configurationFacade.getDureeMinLocation().getValeur());
+                    reservation.setPrixLocationAppliquee(selected.getPrixLocation());
 
                     reservation.setObjet(selected);
                     reservationsFacade.createReservation(reservation);
@@ -166,7 +166,7 @@ public class ObjetController implements Serializable {
         items = getFacade().getObjectsByCriteres(libelle, categorie, pointLocation);
     }
 
-    public Categorie getCategorie() { 
+    public Categorie getCategorie() {
         return categorie;
     }
 

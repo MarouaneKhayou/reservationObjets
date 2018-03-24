@@ -37,6 +37,23 @@ public class DateUtil {
         feriesDates.add(Year.now().atMonth(Month.DECEMBER).atDay(25));
     }
 
+    public static int calculDureeEffectiveLocation(Date dateRetrait, Date dateRetour) {
+        int nbr = 0;
+        LocalDate dr = dateRetrait.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dR = dateRetour.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        if (dr.isBefore(dR)) {
+            for (LocalDate date = dr; date.isBefore(dR); date = date.plusDays(1)) {
+                if (date.getDayOfWeek().getValue() != 7 & !ifHoliday(date)) {
+                    nbr++;
+                }
+            }
+            return nbr++;
+        } else {
+            return -1;
+        }
+    }
+
     /**
      * Ajouter un nobre de jour à une date
      *
@@ -75,5 +92,13 @@ public class DateUtil {
             }
         }
         return false;
+    }
+
+    public static void main(String[] args) {
+        LocalDate ld = Year.now().atMonth(Month.APRIL).atDay(3);
+
+        Date date = Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        System.out.println(calculDureeEffectiveLocation(new Date(), date));
+        System.out.println(addDaysToDate(new Date(), 1));
     }
 }

@@ -119,4 +119,19 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
         remove(selected);
     }
 
+    public Reservation getReservationByObjetId(String idObjet) {
+        List<Reservation> res = em.createQuery("SELECT R FROM Reservation AS R WHERE R.objet.idObjet='" + idObjet + "'").getResultList();
+        if (res.isEmpty()) {
+            return null;
+        }
+        return res.get(0);
+    }
+
+    public void validerRetourObjet(Reservation reservation) {
+        reservation.setEtatReservation(-1);
+        edit(reservation);
+        reservation.getObjet().setEtatObjet(0);
+        objetFacade.edit(reservation.getObjet());
+    }
+
 }

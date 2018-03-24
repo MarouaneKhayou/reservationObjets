@@ -15,6 +15,7 @@
 
         <ui:define name="body">
             #{utilisateurController.initParams()}
+            #{utilisateurController.initConnectedUser()}
             <style>
                 .alignTop {
                     vertical-align: top;
@@ -24,7 +25,7 @@
 
                 <h:panelGrid columns="2" cellpadding="20" columnClasses="alignTop, alignTop" > 
                     <p:panel id="basic" header="Utilisateur" style="display: table">
-                        <p:graphicImage value="../utilisateur/user.png" width="150" height="150" />
+                        <p:graphicImage value="../user.png" width="150" height="150" />
                         <p:separator />
                         <h:outputText style="display:block; font-weight: bold;" 
                                       value="Nom : #{utilisateurController.selected.nom}" />
@@ -55,7 +56,6 @@
                         </p:fieldset> 
                         <p:panel header="Historique des locations">
                             <p:dataTable id="datalist" value="#{utilisateurController.getAllUserLocations()}" var="item"
-                                         selectionMode="single" selection="#{reservationController.selected}"
                                          paginator="true"
                                          rowKey="#{item.id}" emptyMessage="Aucune location n'est effectuée"
                                          rows="10"
@@ -66,25 +66,27 @@
                                     <f:facet name="header">
                                         <h:outputText value="Id objet"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.utilisateur}"/>
+                                    <h:outputText value="#{item.objet.idObjet}"/>
                                 </p:column>
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Libellé"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.objet}"/>
+                                    <h:outputText value="#{item.objet.libelle}"/>
                                 </p:column>
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Date réservation"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.dureeLocation}"/>
+                                    <h:outputText value="#{item.dateReservation}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
                                 </p:column>
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Date de récupération"/>
                                     </f:facet>  
-                                    <h:outputText value="#{item.dateEffectiveLocation}">
+                                    <h:outputText value="#{item.dateRetrait}">
                                         <f:convertDateTime pattern="dd-MM-yyyy" />
                                     </h:outputText>                                
                                 </p:column>
@@ -92,7 +94,7 @@
                                     <f:facet name="header">
                                         <h:outputText value="Date de retour"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.dateEffectiveLocation}">
+                                    <h:outputText value="#{item.dateRetour}">
                                         <f:convertDateTime pattern="dd-MM-yyyy" />
                                     </h:outputText>
                                 </p:column>
@@ -100,19 +102,18 @@
                                     <f:facet name="header">
                                         <h:outputText value="Prix location/jour"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.dureeLocation}"/>
+                                    <h:outputText value="#{item.prixLocationAppliquee}€"/>
                                 </p:column>  
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Prix total"/>
                                     </f:facet>
-                                    <h:outputText value="#{item.dureeLocation}"/>
+                                    <h:outputText value="#{item.dureeLocation}€"/>
                                 </p:column>  
                             </p:dataTable>
                         </p:panel>  
                         <p:panel header="Locations en cours">
-                            <p:dataTable id="datalist2" value="#{utilisateurController.getUserLocationsEncours()}" var="item"
-                                         selectionMode="single" selection="#{reservationController.selected}"
+                            <p:dataTable id="datalist2" value="#{utilisateurController.getUserLocationsEncours()}" var="item" 
                                          paginator="true"
                                          rowKey="#{item.id}"
                                          rows="10" emptyMessage="Aucune location en cours"

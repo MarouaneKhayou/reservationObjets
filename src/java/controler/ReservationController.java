@@ -38,9 +38,29 @@ public class ReservationController implements Serializable {
     private Objet objet;
     private Integer dureeLocation;
     private String idReservation;
+    private String idObjet;
     private List<Reservation> reservations;
+    private Date dateRetour;
 
     public ReservationController() {
+    }
+
+    public void afficherObjet() {
+        if (idObjet.equals("")) {
+            JsfUtil.addErrorMessage("Veuillez introduire l'identifiant de l'objet");
+        } else {
+            selected = getFacade().getReservationByObjetId(idObjet);
+            if (selected == null) {
+                JsfUtil.addErrorMessage("Objet inexistante !");
+                initParams();
+            } else if (selected.getEtatReservation() == 0) {
+                JsfUtil.addErrorMessage("Objet en cours de réservation");
+            } else if (selected.getEtatReservation() == 1) {
+                isValidReservation = true;
+            } else if (selected.getEtatReservation() == -1) {
+                JsfUtil.addErrorMessage("Réservation de l'objet terminée");
+            }
+        }
     }
 
     public void afficherReservation() {
@@ -55,9 +75,33 @@ public class ReservationController implements Serializable {
                 isValidReservation = true;
             } else if (selected.getEtatReservation() == 1) {
                 JsfUtil.addErrorMessage("Réservation en cours de location");
-            } else if (selected.getEtatReservation() == 2) {
+            } else if (selected.getEtatReservation() == -1) {
                 JsfUtil.addErrorMessage("Réservation terminée");
             }
+        }
+    }
+
+    public void prepareObjetRetourValidation() {
+        if (dateRetour == null) {
+            JsfUtil.addErrorMessage("Veuillez introduire une date de retour");
+        } else {
+            reservations.stream().forEach((Reservation r) -> {
+                r.setDateRetour(dateRetour);
+                r.setDureeEffectiveLocation(DateUtil.calculDureeEffectiveLocation(r.getDateRetrait(), dateRetour));
+                Double prixTotal;
+                if (r.getDureeEffectiveLocation() <= r.getDureeMinLocationAppliquee()) {
+                    prixTotal = (r.getDureeMinLocationAppliquee() * r.getObjet().getPrixLocation())
+                            + r.getAmendeDegradation();
+                } else if (r.getDureeEffectiveLocation() <= r.getDureeMaxLocationAppliquee()) {
+                    prixTotal = (r.getDureeMaxLocationAppliquee() * r.getObjet().getPrixLocation())
+                            + r.getAmendeDegradation();
+                } else {
+                    prixTotal = (r.getDureeMaxLocationAppliquee() * r.getObjet().getPrixLocation())
+                            + (r.getDureeEffectiveLocation() - r.getDureeMaxLocationAppliquee())
+                            * r.getAmendeDepassementJournaliereAppliquee() + r.getAmendeDegradation();
+                }
+                r.setPrixTotal(prixTotal);
+            });
         }
     }
 
@@ -66,6 +110,14 @@ public class ReservationController implements Serializable {
             r.setDateRetrait(new Date());
             r.setDateLimiteRetour(DateUtil.addDaysToDate(new Date(), r.getDureeLocation()));
         });
+    }
+
+    public void validerRetourObjet() {
+        reservations.stream().forEach((item) -> {
+            getFacade().validerRetourObjet(item);
+        });
+        initParams();
+        JsfUtil.addSuccessMessage("Retour effecté avec success");
     }
 
     public void validerContrat() {
@@ -77,14 +129,15 @@ public class ReservationController implements Serializable {
     }
 
     public void deleteReservation(Reservation reservation) {
-        System.out.println(reservation.getIdReservation());
         reservations.remove(reservation);
         JsfUtil.addSuccessMessage("Réservation supprimée!");
     }
 
     public void ajouterReservation() {
+        selected.setAmendeDegradation(new Double(0));
         reservations.add(selected);
         idReservation = "";
+        idObjet = "";
         isValidReservation = false;
         selected = new Reservation();
         JsfUtil.addSuccessMessage("Réservation ajoutée avec success");
@@ -92,6 +145,8 @@ public class ReservationController implements Serializable {
 
     public void initParams() {
         idReservation = "";
+        idObjet = "";
+        dateRetour = null;
         isValidReservation = false;
         selected = new Reservation();
         reservations = new ArrayList<>();
@@ -163,6 +218,22 @@ public class ReservationController implements Serializable {
 
     public void setIdReservation(String idReservation) {
         this.idReservation = idReservation;
+    }
+
+    public Date getDateRetour() {
+        return dateRetour;
+    }
+
+    public void setDateRetour(Date dateRetour) {
+        this.dateRetour = dateRetour;
+    }
+
+    public String getIdObjet() {
+        return idObjet;
+    }
+
+    public void setIdObjet(String idObjet) {
+        this.idObjet = idObjet;
     }
 
     public Reservation prepareCreate() {

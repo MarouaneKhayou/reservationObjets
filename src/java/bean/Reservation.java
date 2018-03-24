@@ -32,7 +32,7 @@ public class Reservation implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateReservation;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dateEffectiveLocation;
+    private Date dateRetour;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateLimiteRetour;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -44,6 +44,7 @@ public class Reservation implements Serializable {
     private int dureeMaxLocationAppliquee;
     private int dureeMinLocationAppliquee;
     private int amendeDepassementJournaliereAppliquee;
+    private Double prixLocationAppliquee;
     private Double prixTotal;
     @ManyToOne
     private Objet objet;
@@ -109,12 +110,12 @@ public class Reservation implements Serializable {
         this.dureeEffectiveLocation = dureeEffectiveLocation;
     }
 
-    public Date getDateEffectiveLocation() {
-        return dateEffectiveLocation;
+    public Date getDateRetour() {
+        return dateRetour;
     }
 
-    public void setDateEffectiveLocation(Date dateEffectiveLocation) {
-        this.dateEffectiveLocation = dateEffectiveLocation;
+    public void setDateRetour(Date dateRetour) {
+        this.dateRetour = dateRetour;
     }
 
     public Date getDateLimiteRetour() {
@@ -179,6 +180,14 @@ public class Reservation implements Serializable {
 
     public void setPrixTotal(Double prixTotal) {
         this.prixTotal = prixTotal;
+    }
+
+    public Double getPrixLocationAppliquee() {
+        return prixLocationAppliquee;
+    }
+
+    public void setPrixLocationAppliquee(Double prixLocationAppliquee) {
+        this.prixLocationAppliquee = prixLocationAppliquee;
     }
 
     public Long getId() {

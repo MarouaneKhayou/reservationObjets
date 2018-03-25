@@ -21,6 +21,45 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+
+    <filter> 
+        <filter-name>AdminProfilFilter</filter-name>
+        <filter-class>security.AdminProfilFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>ClientProfilFilter</filter-name>
+        <filter-class>security.ClientProfilFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>EmployeProfilFilter</filter-name>
+        <filter-class>security.EmployeProfilFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>VisiteurProfilFilter</filter-name>
+        <filter-class>security.VisiteurProfilFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AdminProfilFilter</filter-name>
+        <url-pattern>/faces/admin/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ClientProfilFilter</filter-name>
+        <url-pattern>/faces/utilisateur/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>EmployeProfilFilter</filter-name>
+        <url-pattern>/faces/employee/*</url-pattern>
+    </filter-mapping> 
+    <filter-mapping>
+        <filter-name>VisiteurProfilFilter</filter-name>
+        <url-pattern>/faces/public/login.xhtml</url-pattern>
+    </filter-mapping> 
+    <filter-mapping>
+        <filter-name>VisiteurProfilFilter</filter-name>
+        <url-pattern>/faces/public/register.xhtml</url-pattern>
+    </filter-mapping>
+    
     <session-config>
         <session-timeout>
             30

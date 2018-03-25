@@ -32,12 +32,12 @@ public class SessionUtil {
 
     public static void goLogin() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.redirect(ec.getRequestContextPath() + "/faces/utilisateur/login.xhtml");
+        ec.redirect(ec.getRequestContextPath() + "/faces/public/login.xhtml");
     }
 
     public static void goRegister() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.redirect(ec.getRequestContextPath() + "/faces/utilisateur/register.xhtml");
+        ec.redirect(ec.getRequestContextPath() + "/faces/public/register.xhtml");
     }
 
     public static void goPanier() throws IOException {

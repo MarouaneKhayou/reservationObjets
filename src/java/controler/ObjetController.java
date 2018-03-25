@@ -244,7 +244,7 @@ public class ObjetController implements Serializable {
     public String prepareView(Objet objet) {
         selected = objet;
         System.out.println("prepare : " + selected.getLibelle());
-        return "/utilisateur/objet/Details.xhtml";
+        return "/public/objet/Details.xhtml";
     }
 
     public void prepareEdit(Objet objet) {

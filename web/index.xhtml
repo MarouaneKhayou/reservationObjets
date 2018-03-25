@@ -48,7 +48,7 @@
                             rows="12" paginator="true" id="objets" emptyMessage="Aucun objet trouvé"
                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                             rowsPerPageTemplate="6,12,16">
-                    <p:panel id="basic" header="#{objet.libelle} | #{objet.categorie.nom}" style="margin-top:40px; display: table; box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
+                    <p:panel id="basic" header="#{objet.libelle} | #{objet.categorie.nom}" style=" display: table; box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
                         <h:panelGrid columns="1" cellpadding="150" style="background-image: url('page_accueil_site.jpg')">
                             <h:outputText style="color: white;font-weight: bold; font-size: xx-large;"  
                                           value="#{objet.libelle}" />

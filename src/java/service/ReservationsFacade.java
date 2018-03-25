@@ -9,11 +9,15 @@ import bean.Objet;
 import bean.PointLocation;
 import bean.Reservation;
 import bean.Utilisateur;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.DateUtil;
 
 /**
  *
@@ -26,12 +30,47 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     private EntityManager em;
     @EJB
     private ObjetFacade objetFacade;
+    @EJB
+    private ConfigurationFacade configurationFacade;
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
 
+    /**
+     * Test les regles de gestion 15 et 16
+     */
+    public void verifierReservationsEncours() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        List<Reservation> reservations = em.createQuery("SELECT r FROM Reservation AS r WHERE r.etatReservation=0 AND "
+                + " r.dateLimiteRecuperation<'" + sdf.format(new Date()) + "'").getResultList();
+        reservations.stream().forEach((Reservation r) -> {
+            r.getObjet().setEtatObjet(0);
+            System.out.println("delete");
+            objetFacade.edit(r.getObjet());
+            remove(r);
+        });
+
+        List<Reservation> locations = em.createQuery("SELECT r FROM Reservation AS r WHERE r.etatReservation=1").getResultList();
+        locations.stream().forEach((Reservation r) -> {
+            int nbrDays = DateUtil.calculDureeEffectiveLocation(r.getDateRetrait(), new Date());
+            if (nbrDays > 3 * r.getDureeMaxLocationAppliquee()) {
+                r.setEtatReservation(-3);
+                r.getObjet().setEtatObjet(-1);
+                edit(r);
+                objetFacade.edit(r.getObjet());
+            }
+        });
+
+    }
+
+    /**
+     * Valider une réservation
+     *
+     * @param reservation
+     */
     public void validerContrat(Reservation reservation) {
         reservation.setEtatReservation(1);
         edit(reservation);
@@ -39,10 +78,22 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
         objetFacade.edit(reservation.getObjet());
     }
 
+    /**
+     * Liste des réservatione en cours d'un utilisateur
+     *
+     * @param utilisateur
+     * @return
+     */
     public List<Reservation> getUserReservationsEncours(Utilisateur utilisateur) {
         return getUserReservationByEtatTemplate(utilisateur, 0, null);
     }
 
+    /**
+     * Récuperer une réservation par identifiant
+     *
+     * @param idReservation
+     * @return
+     */
     public Reservation getReservationById(String idReservation) {
         List<Reservation> res = em.createQuery("SELECT R FROM Reservation AS R WHERE R.idReservation='" + idReservation + "'").getResultList();
         if (res.isEmpty()) {
@@ -62,21 +113,53 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
         reservation.setDureeLocation(dureeLocation);
     }
 
+    /**
+     * Liste des réservations d'un utilisateur dans un point de location
+     *
+     * @param utilisateur
+     * @param pointLocation
+     * @return
+     */
     public List<Reservation> getUserReservations(Utilisateur utilisateur, PointLocation pointLocation) {
         return getUserReservationByEtatTemplate(utilisateur, 0, pointLocation);
     }
 
+    /**
+     * Liste des des locations d'un utilisateur dans un point de location
+     *
+     * @param utilisateur
+     * @param pointLocation
+     * @return
+     */
     public List<Reservation> getUserLocationsEncours(Utilisateur utilisateur, PointLocation pointLocation) {
         return getUserReservationByEtatTemplate(utilisateur, 1, pointLocation);
     }
 
+    /**
+     * Liste des locations d'un utilisateur dans un point de location
+     *
+     * @param utilisateur
+     * @param pointLocation
+     * @return
+     */
     public List<Reservation> getAllUserLocations(Utilisateur utilisateur, PointLocation pointLocation) {
         return getUserReservationByEtatTemplate(utilisateur, -1, pointLocation);
     }
 
+    /**
+     * Liste des réservations selon plusieurs critere
+     *
+     * @param utilisateur
+     * @param etatReservation
+     * @param pointLocation
+     * @return
+     */
     private List<Reservation> getUserReservationByEtatTemplate(Utilisateur utilisateur, Integer etatReservation,
             PointLocation pointLocation) {
-        String req = "SELECT r FROM Reservation AS r WHERE r.utilisateur.id=" + utilisateur.getId();
+        String req = "SELECT r FROM Reservation AS r WHERE 1=1";
+        if (utilisateur != null) {
+            req += " AND r.utilisateur.id=" + utilisateur.getId();
+        }
         if (etatReservation != null) {
             req += " AND r.etatReservation=" + etatReservation;
         }
@@ -112,21 +195,37 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
         edit(reservation);
     }
 
-    public void removeReservation(Reservation selected) {
-        Objet objet = objetFacade.find(selected.getObjet().getId());
+    /**
+     * Supprimer une réservation
+     *
+     * @param selected
+     */
+    public void removeReservation(Reservation reservation) {
+        Objet objet = objetFacade.find(reservation.getObjet().getId());
         objet.setEtatObjet(0);
         objetFacade.edit(objet);
-        remove(selected);
+        remove(reservation);
     }
 
+    /**
+     * Récuperer une réservation par identifiant de l
+     *
+     * @param idObjet
+     * @return
+     */
     public Reservation getReservationByObjetId(String idObjet) {
-        List<Reservation> res = em.createQuery("SELECT R FROM Reservation AS R WHERE R.objet.idObjet='" + idObjet + "'").getResultList();
+        List<Reservation> res = em.createQuery("SELECT R FROM Reservation AS R WHERE R.etatReservation=1 AND R.objet.idObjet='" + idObjet + "'").getResultList();
         if (res.isEmpty()) {
             return null;
         }
         return res.get(0);
     }
 
+    /**
+     * Valider le retour d'un objet
+     *
+     * @param reservation
+     */
     public void validerRetourObjet(Reservation reservation) {
         reservation.setEtatReservation(-1);
         edit(reservation);

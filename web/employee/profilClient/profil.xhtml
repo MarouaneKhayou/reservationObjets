@@ -122,6 +122,12 @@
 
                                 <p:column>
                                     <f:facet name="header">
+                                        <h:outputText value="Id réservation"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idReservation}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
                                         <h:outputText value="Id objet"/>
                                     </f:facet>
                                     <h:outputText value="#{item.objet.idObjet}"/>
@@ -178,6 +184,12 @@
                                          rows="10" emptyMessage="Aucune réservation en cours"
                                          rowsPerPageTemplate="10,20,30,40,50"
                                          > 
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Id réservation"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idReservation}"/>
+                                </p:column>
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Id objet"/>

@@ -6,6 +6,7 @@
 package service;
 
 import bean.Categorie;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,13 @@ public class CategorieFacade extends AbstractFacade<Categorie> {
     public CategorieFacade() {
         super(Categorie.class);
     }
-    
+
+    public Categorie getCategorieByName(String nom) {
+        List<Categorie> res = em.createQuery("SELECT c FROM Categorie AS c WHERE UPPER(c.nom) like  UPPER('%" + nom + "%')").getResultList();
+        if (res.isEmpty()) {
+            return null;
+        }
+        return res.get(0);
+    }
+
 }

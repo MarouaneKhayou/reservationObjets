@@ -20,15 +20,7 @@
             <p:layoutUnit position="north" size="65" >
                 <h:form id="menuForm">
                     <p:menubar>
-                        <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/>
-                        <p:submenu label="#{bundle.Maintenance}">
-                            <p:menuitem value="Categorie" outcome="/admin/categorie/List.xhtml" />
-                            <p:menuitem value="Configuration" outcome="/admin/configuration/List.xhtml" />
-                            <p:menuitem value="Objet" outcome="/employee/objet/List.xhtml" />
-                            <p:menuitem value="PointLocation" outcome="/admin/pointLocation/List.xhtml" />
-                            <p:menuitem value="Reservation" outcome="/reservation/List.xhtml" />
-                            <p:menuitem value="Utilisateur" outcome="/utilisateur/List.xhtml" />
-                        </p:submenu>
+                        <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/> 
 
                         <p:menuitem value="Mon compte" outcome="/utilisateur/profil.xhtml" rendered="#{utilisateurController.isUserNormal()}" icon="ui-icon-gear"/>
                         <p:menuitem value="Réservation" outcome="/utilisateur/reservation/List.xhtml" rendered="#{utilisateurController.isUserNormal()}" icon="ui-icon-cart"/>

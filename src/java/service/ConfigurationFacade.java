@@ -39,22 +39,47 @@ public class ConfigurationFacade extends AbstractFacade<Configuration> {
 
     }
 
+    /**
+     * Récuperer la durée minimum de location
+     *
+     * @return
+     */
     public Configuration getDureeMinLocation() {
         return getConfigurationByNameTemplate("NDmL");
     }
 
+    /**
+     * Récuperer l'amende de depassement journaliere
+     *
+     * @return
+     */
     public Configuration getAmendeDepassementJournaliere() {
         return getConfigurationByNameTemplate("ADJ");
     }
 
+    /**
+     * Récuperer le nombre maximum d'objets loués en meme temps
+     *
+     * @return
+     */
     public Configuration getNombreMaxObjetLoue() {
         return getConfigurationByNameTemplate("NMOL");
     }
 
+    /**
+     * Récuperer la durée maximale de location
+     *
+     * @return
+     */
     public Configuration getDureeMaxLocation() {
         return getConfigurationByNameTemplate("NDML");
     }
 
+    /**
+     * Récuperer la durée maximale de réservation
+     *
+     * @return
+     */
     public Configuration getDureeMaxReservation() {
         return getConfigurationByNameTemplate("NDMR");
     }

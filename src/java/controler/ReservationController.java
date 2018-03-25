@@ -121,11 +121,18 @@ public class ReservationController implements Serializable {
     }
 
     public void validerContrat() {
-        reservations.stream().forEach((item) -> {
-            getFacade().validerContrat(item);
-        });
-        initParams();
-        JsfUtil.addSuccessMessage("Contrat validé avec success");
+        int nbrLocationEncours = getFacade().getUserLocationsEncours(reservations.get(0).getUtilisateur(), null).size();
+        nbrLocationEncours += reservations.size();
+        if (nbrLocationEncours < configurationFacade.getNombreMaxObjetLoue().getValeur()) {
+            reservations.stream().forEach((item) -> {
+                getFacade().validerContrat(item);
+            });
+            initParams();
+            JsfUtil.addSuccessMessage("Contrat validé avec success");
+        } else {
+            JsfUtil.addErrorMessage("Nombre maximum d'objets en location atteint !");
+        }
+
     }
 
     public void deleteReservation(Reservation reservation) {
@@ -134,13 +141,26 @@ public class ReservationController implements Serializable {
     }
 
     public void ajouterReservation() {
-        selected.setAmendeDegradation(new Double(0));
-        reservations.add(selected);
-        idReservation = "";
-        idObjet = "";
-        isValidReservation = false;
-        selected = new Reservation();
-        JsfUtil.addSuccessMessage("Réservation ajoutée avec success");
+        if (ifResrvationAlreadySelected()) {
+            JsfUtil.addErrorMessage("Réservation déjà ajoutée");
+        } else {
+            selected.setAmendeDegradation(new Double(0));
+            reservations.add(selected);
+            idReservation = "";
+            idObjet = "";
+            isValidReservation = false;
+            selected = new Reservation();
+            JsfUtil.addSuccessMessage("Réservation ajoutée avec success");
+        }
+    }
+
+    public boolean ifResrvationAlreadySelected() {
+        for (Reservation r : reservations) {
+            if (r.equals(selected)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void initParams() {

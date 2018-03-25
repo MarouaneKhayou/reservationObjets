@@ -42,10 +42,36 @@ public class ObjetFacade extends AbstractFacade<Objet> {
      * @return
      */
     public List<Objet> getObjectsByCriteres(PointLocation pointLocation, int etatObjet, String libelle, Categorie categorie) {
-        String req = "SELECT o FROM Objet o WHERE o.pointLocation.id=" + pointLocation.getId();
+        String req = "SELECT o FROM Objet o WHERE 1=1";
+        if (pointLocation != null) {
+            req += " And o.pointLocation.id=" + pointLocation.getId();
+        }
         if (etatObjet != -1) {
             req += " And o.etatObjet = " + etatObjet;
         }
+        if (categorie != null) {
+            req += " And o.categorie.id= " + categorie.getId();
+        }
+        if (libelle != null) {
+            if (!libelle.equals("")) {
+                req += " And UPPER(o.libelle) like  UPPER('%" + libelle + "%') ";
+            }
+        }
+        System.out.println(req);
+        return em.createQuery(req).getResultList();
+    }
+
+    /**
+     * Méthode pour chercher la liste des objets selon plusieurs critres
+     *
+     * @param pointLocation: le point de location
+     * @param etatObjet: 0: non reservé, 1: reservé, 2: loué
+     * @param libelle: llibelle de l'objet
+     * @param categorie: catégorie
+     * @return
+     */
+    public List<Objet> getObjectsByCriteres(String libelle, Categorie categorie) {
+        String req = "SELECT o FROM Objet o WHERE 1=1";
         if (categorie != null) {
             req += " And o.categorie.id= " + categorie.getId();
         }

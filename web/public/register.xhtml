@@ -7,7 +7,7 @@
     <h:head>
         <title>Facelet Title</title>
     </h:head>
-    <body style="background-image: url('../resources/img/pagelogin.jpg')">
+    <body style="background-image: url('../resources/img/background.jpg')">
         <p:growl id="growld" life="3000" />
 
         #{utilisateurController.prepareCreate()}
@@ -35,7 +35,7 @@
                     <p:password id="password2" value="#{utilisateurController.passord2}" title="Répeter mot de passe" />
 
                     <f:facet name="footer">
-                        <p:commandButton actionListener="#{utilisateurController.create()}" id="submitButton" value="Valider" update="grid, :growld" />
+                        <p:commandButton actionListener="#{utilisateurController.create()}" icon="ui-icon-check" id="submitButton" value="Valider" update="grid, :growld" />
                         <p:commandButton actionListener="#{utilisateurController.goHome()}" id="annulerButton" value="Annuler" process="@this" />
                     </f:facet>
                 </h:panelGrid> 

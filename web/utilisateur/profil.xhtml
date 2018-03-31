@@ -33,8 +33,17 @@
 
                                 <f:facet name="footer">
                                     <p:commandButton actionListener="#{utilisateurController.updateUserInformation()}" id="submitButton" value="Valider" update=":menuForm, @(form)" /> 
+                                    <p:commandButton value="Supprimer mon compte" update=":growl" 
+                                                     style="background: red" 
+                                                     actionListener="#{utilisateurController.supprimerCompte()}">                                     
+                                        <p:confirm header="Confirmation" message="Supprimer votre compte?" icon="ui-icon-alert" />  
+                                    </p:commandButton>  
                                 </f:facet>
-                            </h:panelGrid>
+                            </h:panelGrid> 
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
                         </h:form>
                     </p:panel> 
                 </p:tab>

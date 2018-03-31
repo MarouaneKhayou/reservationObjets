@@ -19,17 +19,27 @@ import util.PasswordUtil;
  */
 @Stateless
 public class UtilisateurFacade extends AbstractFacade<Utilisateur> {
-
+    
     @PersistenceContext(unitName = "reservationObjetsPU")
     private EntityManager em;
-
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-
+    
     public UtilisateurFacade() {
         super(Utilisateur.class);
+    }
+    
+    public int supprimerCompte(Utilisateur utilisateur) {
+        deleteUserReservation(utilisateur);
+        remove(utilisateur);
+        return 1;
+    }
+    
+    public void deleteUserReservation(Utilisateur utilisateur) {
+        em.createQuery("DELETE FROM Reservation AS R WHERE R.utilisateur.id=" + utilisateur.getId()).executeUpdate();
     }
 
     /**

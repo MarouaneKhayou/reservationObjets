@@ -47,6 +47,27 @@ public class UtilisateurController implements Serializable {
     }
 
     /**
+     * Supprission d'un compte utilisateur
+     *
+     * @throws IOException
+     */
+    public void supprimerCompte() throws IOException {
+        List<Reservation> userReservations = reservationsFacade.getUserLocationsEncours(selected, null);
+        if (!userReservations.isEmpty()) {
+            JsfUtil.addErrorMessage("Impossible de supprimer votre compte! vous avez " + userReservations.size() + " objet(s) en cours de location");
+        } else {
+            int res = getFacade().supprimerCompte(getConnectedUser());
+            if (res == 1) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.getExternalContext().getFlash().setKeepMessages(true);
+                SessionUtil.deconnexion();
+                JsfUtil.addSuccessMessage("Compte supprimé avec success");
+                SessionUtil.goHome();
+            }
+        }
+    }
+
+    /**
      * La liste des réservations en cours
      *
      * @return : la liste des réservations en cours
@@ -73,10 +94,16 @@ public class UtilisateurController implements Serializable {
         return reservationsFacade.getAllUserLocations(selected, selectedPointLocation);
     }
 
+    /**
+     * Initialiser le paramettre point de location selectionné
+     */
     public void initParams() {
         selectedPointLocation = null;
     }
 
+    /**
+     * Réinitialiser la valeur de l'utilisateur selectionné
+     */
     public void initConnectedUser() {
         selected = SessionUtil.getConnectedUser();
     }
@@ -116,8 +143,7 @@ public class UtilisateurController implements Serializable {
     }
 
     /**
-     * Méthode pour permettre à l'utilisateur de changer son mot de passe de
-     * l'utilisateur
+     * Méthode qui permet de changer le mot de passe de l'utilisateur
      */
     public void changePassword() {
         if (newPassword.equals(repeatPassword)) {
@@ -155,11 +181,13 @@ public class UtilisateurController implements Serializable {
     }
 
     /**
-     * Déconnecter l'utilisateur connecté et supprimer a session
+     * Déconnecter l'utilisateur connecté et supprimer la session
      *
      * @throws IOException
      */
     public void deconnexion() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
         JsfUtil.addSuccessMessage("Déconnexion reussi!");
         SessionUtil.deconnexion();
         SessionUtil.goHome();
@@ -212,13 +240,13 @@ public class UtilisateurController implements Serializable {
     /**
      * Méthode générique qui teste le profile de l'utilisateur
      *
-     * @param profile: le profile de l'utilisateur, 0: utilisateur normal, 1:
+     * @param profil: le profil de l'utilisateur, 0: utilisateur normal, 1:
      * Empoye, 2 Administrateur
      * @return
      */
-    public boolean testUserProfilTemplate(int profile) {
+    public boolean testUserProfilTemplate(int profil) {
         if (isUserConnected()) {
-            return getConnectedUser().getProfile() == profile;
+            return getConnectedUser().getProfile() == profil;
         }
         return false;
     }
@@ -370,20 +398,19 @@ public class UtilisateurController implements Serializable {
         return ejbFacade;
     }
 
-    /**
-     * GETTERs and SETTERS*
-     */
     public void prepareCreate() {
         selected = new Utilisateur();
         initializeEmbeddableKey();
     }
 
+    /**
+     * Création d'un employé
+     */
     public void createEmploye() {
         if (selected != null) {
             if (selected.getPassword().equals(passord2)) {
                 selected.setProfile(1);
                 PointLocation pointLocation = new PointLocation();
-                System.out.println("zzzzzz " + pointLocation.getId());
                 pointLocation.setId(selectedPointLocation.getId());
                 selected.setPointLocation(selectedPointLocation);
                 persist(PersistAction.CREATE, "Compte créé avec success", true, false);
@@ -398,13 +425,10 @@ public class UtilisateurController implements Serializable {
         if (selected != null) {
             if (selected.getEmail() == null | selected.getPassword().equals("") | passord2.equals("")) {
                 JsfUtil.addErrorMessage("Erreur de validation veuillez indiquer les champs obligatoires");
+            } else if (selected.getPassword().equals(passord2)) {
+                persist(PersistAction.CREATE, "Compte créé avec success", false, true);
             } else {
-                System.out.println("");
-                if (selected.getPassword().equals(passord2)) {
-                    persist(PersistAction.CREATE, "Compte créé avec success", false, true);
-                } else {
-                    JsfUtil.addErrorMessage("Les deux mots de passe doivent se correspondre");
-                }
+                JsfUtil.addErrorMessage("Les deux mots de passe doivent se correspondre");
             }
 
         }
@@ -457,6 +481,8 @@ public class UtilisateurController implements Serializable {
                         JsfUtil.addErrorMessage("Email saisie déja existant!");
                     } else if (res == 1) {
                         selected = new Utilisateur();
+                        FacesContext context = FacesContext.getCurrentInstance();
+                        context.getExternalContext().getFlash().setKeepMessages(true);
                         JsfUtil.addSuccessMessage(successMessage);
                         if (redirectToLogin) {
                             util.SessionUtil.goLogin();

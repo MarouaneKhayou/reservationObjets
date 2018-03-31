@@ -30,26 +30,13 @@ public class DateUtilTest {
      */
     @Test
     public void testAddDaysToDate() {
-        LocalDate date = LocalDate.parse("2018-03-21");
-        Date res = DateUtil.addDaysToDate(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), 6);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        assertTrue(LocalDate.parse("2018-03-28").equals(res.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+        LocalDate date1 = LocalDate.parse("2018-03-21");
+        Date res1 = DateUtil.addDaysToDate(Date.from(date1.atStartOfDay(ZoneId.systemDefault()).toInstant()), 6);
+        assertTrue(LocalDate.parse("2018-03-28").equals(res1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
 
-        fail("The test case is a prototype.");
+        LocalDate date2 = LocalDate.parse("2018-04-06");
+        Date res2 = DateUtil.addDaysToDate(Date.from(date2.atStartOfDay(ZoneId.systemDefault()).toInstant()), 4);
+        assertTrue(LocalDate.parse("2018-04-11").equals(res2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
+
     }
-
-    /**
-     * Test of ifHoliday method, of class DateUtil.
-     */
-    @Test
-    public void testIfHoliday() {
-        System.out.println("ifHoliday");
-        LocalDate date = null;
-        boolean expResult = false;
-        boolean result = DateUtil.ifHoliday(date);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
 }

@@ -23,6 +23,10 @@ public class DateUtil {
 
     public static List<LocalDate> feriesDates = new ArrayList<>();
 
+    /**
+     * Initialiser la liste des jours fériés, le jour et le mois d'un jour férié
+     * est fixe alors que l'année correspond à l'année en cours
+     */
     static {
         feriesDates.add(Year.now().atMonth(Month.JANUARY).atDay(12));
         feriesDates.add(Year.now().atMonth(Month.APRIL).atDay(2));
@@ -37,6 +41,14 @@ public class DateUtil {
         feriesDates.add(Year.now().atMonth(Month.DECEMBER).atDay(25));
     }
 
+    /**
+     * Calculer la la durée effective de location à partir de la date de retrait
+     * et la date de retour de l'objet
+     *
+     * @param dateRetrait
+     * @param dateRetour
+     * @return: le nombre de jours de location
+     */
     public static int calculDureeEffectiveLocation(Date dateRetrait, Date dateRetour) {
         int nbr = 0;
         LocalDate dr = dateRetrait.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -55,7 +67,7 @@ public class DateUtil {
     }
 
     /**
-     * Ajouter un nobre de jour à une date
+     * Ajouter un nombre de jours à une date
      *
      * @param date: la date
      * @param nbrDays: le nombre de jours à ajouter
@@ -80,7 +92,7 @@ public class DateUtil {
     }
 
     /**
-     * Tester si un jour est un jour ferié
+     * Teste si un jour est un jour ferié
      *
      * @param date: la date
      * @return: true si la date corresond à un jour férié, false sinon
@@ -92,13 +104,5 @@ public class DateUtil {
             }
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        LocalDate ld = Year.now().atMonth(Month.APRIL).atDay(3);
-
-        Date date = Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        System.out.println(calculDureeEffectiveLocation(new Date(), date));
-        System.out.println(addDaysToDate(new Date(), 1));
     }
 }

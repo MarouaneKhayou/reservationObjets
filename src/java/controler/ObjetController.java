@@ -111,9 +111,6 @@ public class ObjetController implements Serializable {
                     reservationsFacade.createReservation(reservation);
                     showDialgue = true;
                     SessionUtil.goUserReservations();
-
-                    //reservation.setDateLimiteRecuperation(dateLimiteRecuperation);
-                    //reservation.setId(libelle); 
                 }
 
             } catch (Exception ex) {
@@ -123,6 +120,9 @@ public class ObjetController implements Serializable {
         }
     }
 
+    /**
+     * Afficher une boite de dialogue avec le récapitulatif de la réservation
+     */
     public void showReservationConfirmDialogue() {
         if (showDialgue) {
             RequestContext context = RequestContext.getCurrentInstance();

@@ -10,12 +10,22 @@ public class SessionUtil {
 
     private static final SessionUtil instance = new SessionUtil();
 
+    /**
+     * Rediriger l'utilisteur vers la page des réservations
+     *
+     * @throws IOException
+     */
     public static void goUserReservations() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.getFlash().setKeepMessages(true);
         ec.redirect(ec.getRequestContextPath() + "/faces/utilisateur/reservation/List.xhtml");
     }
 
+    /**
+     * Rediriger l'utilisteur vers la page du profil
+     *
+     * @throws IOException
+     */
     public static void goUserProfile() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.getFlash().setKeepMessages(true);
@@ -25,30 +35,40 @@ public class SessionUtil {
     private SessionUtil() {
     }
 
+    /**
+     * Rediriger l'utilisteur vers la page d'acceuil de l'application
+     *
+     * @throws IOException
+     */
     public static void goHome() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.redirect(ec.getRequestContextPath() + "/");
     }
 
+    /**
+     * Rediriger l'utilisteur vers la page d'authentification
+     *
+     * @throws IOException
+     */
     public static void goLogin() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.redirect(ec.getRequestContextPath() + "/faces/public/login.xhtml");
     }
 
+    /**
+     * Rediriger l'utilisteur vers la page de création d'un compte utilisateur
+     *
+     * @throws IOException
+     */
     public static void goRegister() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.redirect(ec.getRequestContextPath() + "/faces/public/register.xhtml");
     }
 
-    public static void goPanier() throws IOException {
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.redirect(ec.getRequestContextPath() + "/faces/reservation/userPanier.xhtml");
-    }
-
     /**
-     * Ajouter un utilisateur à la session
+     * Ajouter un utilisateur dans la session
      *
-     * @param user : l'utilisateur qui vient de se connecter
+     * @param utilisateur : l'utilisateur qui vient de se connecter
      */
     public static void registerUser(Utilisateur utilisateur) {
         setAttribute("Utilisateur", utilisateur);
@@ -64,7 +84,7 @@ public class SessionUtil {
     }
 
     /**
-     * Déconnecter l'utilisateur et supprimer le supprimer de la session
+     * Déconnecter l'utilisateur et le supprimer de la session
      */
     public static void deconnexion() {
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -84,7 +104,7 @@ public class SessionUtil {
     /**
      * Rediriger vers une URL
      *
-     * @param pagePath
+     * @param pagePath: l'url
      * @throws IOException
      */
     public static void redirect(String pagePath) throws IOException {

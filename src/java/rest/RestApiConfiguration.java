@@ -12,6 +12,11 @@ import javax.ws.rs.core.Application;
 @ApplicationPath("/api")
 public class RestApiConfiguration extends Application {
 
+    /**
+     * Initialiser l'API Rest
+     *
+     * @return: la liste des classes Rest
+     */
     @Override
     public Set<Class<?>> getClasses() {
         HashSet h = new HashSet<Class<?>>();

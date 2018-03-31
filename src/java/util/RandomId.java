@@ -13,6 +13,12 @@ import org.apache.commons.lang3.RandomStringUtils;
  */
 public class RandomId {
 
+    /**
+     * Génerer une chaine de caractere aléatoire de longueur définée
+     *
+     * @param length
+     * @return: la chaine de caractere aléatoire
+     */
     public static String getRandomAlphanumricId(int length) {
         return RandomStringUtils.randomAlphanumeric(length);
     }

@@ -15,6 +15,12 @@ import java.security.SecureRandom;
  */
 public class PasswordUtil {
 
+    /**
+     * Méthode qui permet de renvoyer le hash d'un password
+     *
+     * @param passwordToHash: le mot de passe
+     * @return: le hash du mot de passe
+     */
     public static String getHashedPassword(String passwordToHash) {
         String generatedPassword = null;
         try {
@@ -29,12 +35,5 @@ public class PasswordUtil {
             e.printStackTrace();
         }
         return generatedPassword;
-    }
-
-    private static byte[] getSalt() throws NoSuchAlgorithmException {
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        sr.nextBytes(salt);
-        return salt;
     }
 }

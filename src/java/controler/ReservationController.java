@@ -45,6 +45,9 @@ public class ReservationController implements Serializable {
     public ReservationController() {
     }
 
+    /**
+     * Afficher le détail d'un objet
+     */
     public void afficherObjet() {
         if (idObjet.equals("")) {
             JsfUtil.addErrorMessage("Veuillez introduire l'identifiant de l'objet");
@@ -63,6 +66,9 @@ public class ReservationController implements Serializable {
         }
     }
 
+    /**
+     * Afficher le détail d'une réservation
+     */
     public void afficherReservation() {
         if (idReservation.equals("")) {
             JsfUtil.addErrorMessage("Veuillez introduire une valeur");
@@ -81,6 +87,9 @@ public class ReservationController implements Serializable {
         }
     }
 
+    /**
+     * Préparer les objets à retrouné au stock du point de location
+     */
     public void prepareObjetRetourValidation() {
         if (dateRetour == null) {
             JsfUtil.addErrorMessage("Veuillez introduire une date de retour");
@@ -105,6 +114,9 @@ public class ReservationController implements Serializable {
         }
     }
 
+    /**
+     * Préparer la validation de la réservation
+     */
     public void prepareValidation() {
         reservations.stream().forEach((r) -> {
             r.setDateRetrait(new Date());
@@ -112,6 +124,9 @@ public class ReservationController implements Serializable {
         });
     }
 
+    /**
+     * Valider le retour des objets
+     */
     public void validerRetourObjet() {
         reservations.stream().forEach((item) -> {
             getFacade().validerRetourObjet(item);
@@ -120,6 +135,9 @@ public class ReservationController implements Serializable {
         JsfUtil.addSuccessMessage("Retour effecté avec success");
     }
 
+    /**
+     * Valider le location
+     */
     public void validerContrat() {
         int nbrLocationEncours = getFacade().getUserLocationsEncours(reservations.get(0).getUtilisateur(), null).size();
         nbrLocationEncours += reservations.size();
@@ -135,11 +153,19 @@ public class ReservationController implements Serializable {
 
     }
 
+    /**
+     * Supprimer une réservation de la liste des réservations selectionnées
+     *
+     * @param reservation: la réservation
+     */
     public void deleteReservation(Reservation reservation) {
         reservations.remove(reservation);
         JsfUtil.addSuccessMessage("Réservation supprimée!");
     }
 
+    /**
+     * Ajouter une réservation à la liste des réservations selectionnées
+     */
     public void ajouterReservation() {
         if (ifResrvationAlreadySelected()) {
             JsfUtil.addErrorMessage("Réservation déjà ajoutée");
@@ -154,6 +180,11 @@ public class ReservationController implements Serializable {
         }
     }
 
+    /**
+     * Vérefier si une réservation n'est pas déjà selectionnée
+     *
+     * @return: true ou bien false
+     */
     public boolean ifResrvationAlreadySelected() {
         for (Reservation r : reservations) {
             if (r.equals(selected)) {
@@ -163,6 +194,9 @@ public class ReservationController implements Serializable {
         return false;
     }
 
+    /**
+     * Initialiser les parametres
+     */
     public void initParams() {
         idReservation = "";
         idObjet = "";

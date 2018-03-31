@@ -30,6 +30,12 @@ public class CategorieFacade extends AbstractFacade<Categorie> {
         super(Categorie.class);
     }
 
+    /**
+     * Récuperer une catégorie d'objets par le nom
+     *
+     * @param nom: le nom de la catégorie
+     * @return : catégorie
+     */
     public Categorie getCategorieByName(String nom) {
         List<Categorie> res = em.createQuery("SELECT c FROM Categorie AS c WHERE UPPER(c.nom) like  UPPER('%" + nom + "%')").getResultList();
         if (res.isEmpty()) {

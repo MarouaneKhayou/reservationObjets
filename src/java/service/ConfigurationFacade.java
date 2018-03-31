@@ -30,6 +30,12 @@ public class ConfigurationFacade extends AbstractFacade<Configuration> {
         super(Configuration.class);
     }
 
+    /**
+     * Récuperer une variable configuration par nom
+     *
+     * @param nom: le nom
+     * @return: objet configuration
+     */
     private Configuration getConfigurationByNameTemplate(String nom) {
         List<Configuration> res = em.createQuery("SELECT c FROM Configuration AS c WHERE c.nom='" + nom + "'").getResultList();
         if (res.isEmpty()) {
@@ -40,9 +46,9 @@ public class ConfigurationFacade extends AbstractFacade<Configuration> {
     }
 
     /**
-     * Récuperer la durée minimum de location
+     * Récuperer la durée minimale de location
      *
-     * @return
+     * @return: configuration
      */
     public Configuration getDureeMinLocation() {
         return getConfigurationByNameTemplate("NDmL");
@@ -51,7 +57,7 @@ public class ConfigurationFacade extends AbstractFacade<Configuration> {
     /**
      * Récuperer l'amende de depassement journaliere
      *
-     * @return
+     * @return: configuration
      */
     public Configuration getAmendeDepassementJournaliere() {
         return getConfigurationByNameTemplate("ADJ");
@@ -60,7 +66,7 @@ public class ConfigurationFacade extends AbstractFacade<Configuration> {
     /**
      * Récuperer le nombre maximum d'objets loués en meme temps
      *
-     * @return
+     * @return: configuration
      */
     public Configuration getNombreMaxObjetLoue() {
         return getConfigurationByNameTemplate("NMOL");
@@ -69,7 +75,7 @@ public class ConfigurationFacade extends AbstractFacade<Configuration> {
     /**
      * Récuperer la durée maximale de location
      *
-     * @return
+     * @return: configuration
      */
     public Configuration getDureeMaxLocation() {
         return getConfigurationByNameTemplate("NDML");
@@ -78,7 +84,7 @@ public class ConfigurationFacade extends AbstractFacade<Configuration> {
     /**
      * Récuperer la durée maximale de réservation
      *
-     * @return
+     * @return: configuration
      */
     public Configuration getDureeMaxReservation() {
         return getConfigurationByNameTemplate("NDMR");

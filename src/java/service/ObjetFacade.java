@@ -57,15 +57,12 @@ public class ObjetFacade extends AbstractFacade<Objet> {
                 req += " And UPPER(o.libelle) like  UPPER('%" + libelle + "%') ";
             }
         }
-        System.out.println(req);
         return em.createQuery(req).getResultList();
     }
 
     /**
      * Méthode pour chercher la liste des objets selon plusieurs critres
      *
-     * @param pointLocation: le point de location
-     * @param etatObjet: 0: non reservé, 1: reservé, 2: loué
      * @param libelle: llibelle de l'objet
      * @param categorie: catégorie
      * @return
@@ -80,7 +77,6 @@ public class ObjetFacade extends AbstractFacade<Objet> {
                 req += " And UPPER(o.libelle) like  UPPER('%" + libelle + "%') ";
             }
         }
-        System.out.println(req);
         return em.createQuery(req).getResultList();
     }
 

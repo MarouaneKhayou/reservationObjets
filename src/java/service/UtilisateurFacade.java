@@ -19,25 +19,36 @@ import util.PasswordUtil;
  */
 @Stateless
 public class UtilisateurFacade extends AbstractFacade<Utilisateur> {
-    
+
     @PersistenceContext(unitName = "reservationObjetsPU")
     private EntityManager em;
-    
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     public UtilisateurFacade() {
         super(Utilisateur.class);
     }
-    
+
+    /**
+     * Supprimer un compte utilisateur
+     *
+     * @param utilisateur: l'utilisateur
+     * @return 1: si le compte est supprimé
+     */
     public int supprimerCompte(Utilisateur utilisateur) {
         deleteUserReservation(utilisateur);
         remove(utilisateur);
         return 1;
     }
-    
+
+    /**
+     * Supprimer toutes les réservations d'un utilisateur
+     *
+     * @param utilisateur: l'utilisateur
+     */
     public void deleteUserReservation(Utilisateur utilisateur) {
         em.createQuery("DELETE FROM Reservation AS R WHERE R.utilisateur.id=" + utilisateur.getId()).executeUpdate();
     }
@@ -46,14 +57,14 @@ public class UtilisateurFacade extends AbstractFacade<Utilisateur> {
      * Récuperer la liste des employés d'un point de location
      *
      * @param pointLocation: le point de location
-     * @return La liste des employés
+     * @return: La liste des employés
      */
     public List<Utilisateur> getPointLocationEmployes(PointLocation pointLocation) {
         return em.createQuery("SELECT u FROM Utilisateur AS u WHERE u.profile=1 AND u.pointLocation.id=" + pointLocation.getId()).getResultList();
     }
 
     /**
-     * Changer le mot de passe de l'utilisateur
+     * Changer le mot de passe de d'un utilisateur
      *
      * @param user: l'utilisateur
      * @param recentPassword: l'ancien mot de passe
@@ -144,8 +155,8 @@ public class UtilisateurFacade extends AbstractFacade<Utilisateur> {
     }
 
     /**
-     * Methode privée qui permet la création d'un utilisateur utilisateur normal
-     * ou bine employé
+     * Methode privée qui permet la création d'un utilisateur normal ou bien un
+     * employé
      *
      * @param utilisateur: l'utilisateur
      * @param profile: le profile 0: utilisateur normal, 1: employé

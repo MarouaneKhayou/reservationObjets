@@ -47,7 +47,7 @@ public class ObjetRest {
     public List<ObjetDTO> getObjetsByLibelleAndCategorie(@PathParam("categorie") String categorie) throws NotFoundException, AppException {
         return getObjetDTOsByCriteres(null, categorie);
     }
-    
+
     @GET
     @Path("/libelle/{libelle}/categorie/{categorie}")
     @Produces(MediaType.APPLICATION_XML)
@@ -56,7 +56,15 @@ public class ObjetRest {
         return getObjetDTOsByCriteres(libelle, categorie);
     }
 
-    List<ObjetDTO> getObjetDTOsByCriteres(String libelle, String categorie) throws AppException {
+    /**
+     * Récuperer des objets DTO par libelle et catégorie
+     *
+     * @param libelle
+     * @param categorie
+     * @return: la liste des objets DTO
+     * @throws AppException: exception dans le cas d'un objet non trouvé
+     */
+    private List<ObjetDTO> getObjetDTOsByCriteres(String libelle, String categorie) throws AppException {
         Categorie c = null;
 
         if (categorie != null) {

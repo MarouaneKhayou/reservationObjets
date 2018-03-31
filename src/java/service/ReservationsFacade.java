@@ -10,7 +10,6 @@ import bean.PointLocation;
 import bean.Reservation;
 import bean.Utilisateur;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -48,7 +47,6 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
                 + " r.dateLimiteRecuperation<'" + sdf.format(new Date()) + "'").getResultList();
         reservations.stream().forEach((Reservation r) -> {
             r.getObjet().setEtatObjet(0);
-            System.out.println("delete");
             objetFacade.edit(r.getObjet());
             remove(r);
         });
@@ -69,7 +67,7 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     /**
      * Valider une réservation
      *
-     * @param reservation
+     * @param reservation: la réservation à valider
      */
     public void validerContrat(Reservation reservation) {
         reservation.setEtatReservation(1);
@@ -79,10 +77,10 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     }
 
     /**
-     * Liste des réservatione en cours d'un utilisateur
+     * Liste des réservations en cours d'un utilisateur
      *
-     * @param utilisateur
-     * @return
+     * @param utilisateur: l'utilisateur
+     * @return: la liste des réservations
      */
     public List<Reservation> getUserReservationsEncours(Utilisateur utilisateur) {
         return getUserReservationByEtatTemplate(utilisateur, 0, null);
@@ -91,8 +89,9 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     /**
      * Récuperer une réservation par identifiant
      *
-     * @param idReservation
-     * @return
+     * @param idReservation: identifiant de la réservation
+     * @return: la réservation, ou bien null: si la réservation n'est pas
+     * trouvée
      */
     public Reservation getReservationById(String idReservation) {
         List<Reservation> res = em.createQuery("SELECT R FROM Reservation AS R WHERE R.idReservation='" + idReservation + "'").getResultList();
@@ -116,9 +115,9 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     /**
      * Liste des réservations d'un utilisateur dans un point de location
      *
-     * @param utilisateur
-     * @param pointLocation
-     * @return
+     * @param utilisateur: l'utilisateur
+     * @param pointLocation: le point de location
+     * @return: la liste des réservations
      */
     public List<Reservation> getUserReservations(Utilisateur utilisateur, PointLocation pointLocation) {
         return getUserReservationByEtatTemplate(utilisateur, 0, pointLocation);
@@ -127,9 +126,9 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     /**
      * Liste des des locations d'un utilisateur dans un point de location
      *
-     * @param utilisateur
-     * @param pointLocation
-     * @return
+     * @param utilisateur: l'utilisateur
+     * @param pointLocation: le point de location
+     * @return: la liste des réservations
      */
     public List<Reservation> getUserLocationsEncours(Utilisateur utilisateur, PointLocation pointLocation) {
         return getUserReservationByEtatTemplate(utilisateur, 1, pointLocation);
@@ -138,9 +137,9 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     /**
      * Liste des locations d'un utilisateur dans un point de location
      *
-     * @param utilisateur
-     * @param pointLocation
-     * @return
+     * @param utilisateur: l'utilisateur
+     * @param pointLocation: le point de location
+     * @return: la liste des réservations
      */
     public List<Reservation> getAllUserLocations(Utilisateur utilisateur, PointLocation pointLocation) {
         return getUserReservationByEtatTemplate(utilisateur, -1, pointLocation);
@@ -149,10 +148,11 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     /**
      * Liste des réservations selon plusieurs critere
      *
-     * @param utilisateur
-     * @param etatReservation
-     * @param pointLocation
-     * @return
+     * @param utilisateur: l'utilisateur
+     * @param etatReservation: l'etat de réservation 0: réservation, 1:
+     * location, -1: location terminée, null: toutes lesréservations
+     * @param pointLocation: le point de location
+     * @return: liste des réservations
      */
     private List<Reservation> getUserReservationByEtatTemplate(Utilisateur utilisateur, Integer etatReservation,
             PointLocation pointLocation) {
@@ -198,7 +198,7 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     /**
      * Supprimer une réservation
      *
-     * @param selected
+     * @param reservation: la réservation à supprimer
      */
     public void removeReservation(Reservation reservation) {
         Objet objet = objetFacade.find(reservation.getObjet().getId());
@@ -210,8 +210,8 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     /**
      * Récuperer une réservation par identifiant de l
      *
-     * @param idObjet
-     * @return
+     * @param idObjet: l'identifiant de l'objet
+     * @return: la réservation
      */
     public Reservation getReservationByObjetId(String idObjet) {
         List<Reservation> res = em.createQuery("SELECT R FROM Reservation AS R WHERE R.etatReservation=1 AND R.objet.idObjet='" + idObjet + "'").getResultList();
@@ -224,7 +224,7 @@ public class ReservationsFacade extends AbstractFacade<Reservation> {
     /**
      * Valider le retour d'un objet
      *
-     * @param reservation
+     * @param reservation: la réservation
      */
     public void validerRetourObjet(Reservation reservation) {
         reservation.setEtatReservation(-1);

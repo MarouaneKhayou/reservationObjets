@@ -55,12 +55,12 @@ public class DateUtil {
         LocalDate dR = dateRetour.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         if (dr.isBefore(dR)) {
-            for (LocalDate date = dr; date.isBefore(dR); date = date.plusDays(1)) {
+            for (LocalDate date = dr.plusDays(1); date.isBefore(dR); date = date.plusDays(1)) {
                 if (date.getDayOfWeek().getValue() != 7 & !ifHoliday(date)) {
                     nbr++;
                 }
             }
-            return nbr++;
+            return ++nbr;
         } else {
             return -1;
         }
